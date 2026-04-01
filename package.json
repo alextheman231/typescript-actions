@@ -13,16 +13,19 @@
   "sideEffects": true,
   "scripts": {
     "build": "tsdown",
+    "build-configs": "tsdown --config tsdown.configs.config.ts",
     "format": "pnpm run format-prettier && pnpm run format-eslint",
-    "format-eslint": "eslint --fix --suppress-all package.json \"src/**/*.ts\" && rm -f eslint-suppressions.json",
+    "format-eslint": "eslint --fix --suppress-all package.json \"{src,configs}/**/*.ts\" && rm -f eslint-suppressions.json",
     "format-prettier": "pnpm run format-prettier-typescript && pnpm run format-prettier-javascript",
     "format-prettier-javascript": "prettier --write \"**/*.{js,json}\"",
     "format-prettier-typescript": "prettier --parser typescript --write \"**/*.ts\"",
     "lint": "pnpm run lint-eslint && pnpm run lint-prettier",
-    "lint-eslint": "eslint package.json",
+    "lint-eslint": "eslint package.json \"{src,configs}/**/*.ts\"",
     "lint-prettier": "pnpm run lint-prettier-javascript",
     "lint-prettier-javascript": "prettier --check \"**/*.{js,json}\"",
     "lint-prettier-typescript": "prettier --parser typescript --check \"**/*.ts\"",
+    "pre-commit": "pnpm run build-configs && alex-c-line pre-commit",
+    "prepare": "husky",
     "test": "exit 0"
   },
   "author": "alextheman",
@@ -31,13 +34,16 @@
   "devDependencies": {
     "@alextheman/eslint-plugin": "5.11.0",
     "@types/node": "25.5.0",
+    "alex-c-line": "2.4.1",
     "eslint": "10.1.0",
+    "husky": "9.1.7",
     "prettier": "3.8.1",
     "tsdown": "0.21.7",
     "typescript": "6.0.2"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "canvas",
       "unrs-resolver"
     ]
   },

@@ -11,4 +11,4 @@ const config: Array<UserConfig> = [
   },
 ];
 
-export default config
+export default config;
