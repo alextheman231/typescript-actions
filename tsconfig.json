@@ -7,7 +7,9 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "paths": {
-      "src/*": ["./src/*"]
+      "configs/*": ["./configs/*"],
+      "src/*": ["./src/*"],
+      "package.json": ["./package.json"]
     },
     "esModuleInterop": true,
 
@@ -23,5 +25,5 @@
     "declaration": true,
     "useUnknownInCatchVariables": true
   },
-  "include": ["src"]
+  "include": ["src", "configs"]
 }
