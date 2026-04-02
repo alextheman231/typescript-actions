@@ -1,4 +1,5 @@
-name: Safely Install an NPM dependency globally in an action
+name: Safe NPM dependency global install
+description: Safely install an NPM dependency globally in an action
 runs:
   using: node20
   main: dist/index.js
