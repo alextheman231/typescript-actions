@@ -19,12 +19,12 @@ inputs:
     type: string
     required: false
   dependency_group:
-    description: "The dependency group to get the dependency from if version not specified (can be `\"dependencies\" | \"devDependencies\"`)."
+    description: 'The dependency group to get the dependency from if version not specified (can be `"dependencies" | "devDependencies"`).'
     type: string
     required: false
     default: "dependencies"
   package_manager:
-    description: "The package manager to install with. (can be `\"npm\" | \"pnpm\"`)"
+    description: 'The package manager to install with. (can be `"npm" | "pnpm"`)'
     type: string
     required: false
     default: "npm"
