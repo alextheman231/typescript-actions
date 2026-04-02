@@ -1,4 +1,5 @@
 import type { UserConfig } from "tsdown";
+import packageInfo from "./package.json" with { type: "json" };
 
 const config: Array<UserConfig> = [
   {
@@ -8,6 +9,9 @@ const config: Array<UserConfig> = [
     dts: true,
     clean: true,
     fixedExtension: false,
+    deps: {
+      alwaysBundle: [...Object.keys(packageInfo.dependencies)],
+    },
   },
 ];
 
