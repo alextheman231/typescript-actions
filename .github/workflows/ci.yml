@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+jobs:
+  package-ci:
+    uses: alextheman231/github-actions/.github/workflows/package-ci.yml@17b0fa199995087ecc1ac109e4eda26229743802 # v10.5.0
+    with:
+      run_build: false
+
+  actions-ci:
+    uses: alextheman231/github-actions/.github/workflows/actions-ci.yml@17b0fa199995087ecc1ac109e4eda26229743802 # v10.5.0
