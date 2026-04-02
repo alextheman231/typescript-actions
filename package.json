@@ -14,6 +14,7 @@
   "scripts": {
     "build": "tsdown",
     "build-configs": "tsdown --config tsdown.configs.config.ts",
+    "create-release-note": "bash -c 'git pull origin main && alex-c-line template release-note create $@' --",
     "format": "pnpm run format-prettier && pnpm run format-eslint",
     "format-eslint": "eslint --fix --suppress-all package.json \"{src,configs}/**/*.ts\" && rm -f eslint-suppressions.json",
     "format-prettier": "pnpm run format-prettier-typescript && pnpm run format-prettier-javascript",
