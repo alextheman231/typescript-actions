@@ -1,0 +1,13 @@
+name: Create GitHub Release (Internal)
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  create-github-release:
+    permissions:
+      contents: write
+    uses: alextheman231/github-actions/.github/workflows/create-github-release.yml@17b0fa199995087ecc1ac109e4eda26229743802 # v10.5.0
+    secrets:
+      APP_ID: ${{ secrets.ALEX_UP_BOT_APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.ALEX_UP_BOT_PRIVATE_KEY }}
