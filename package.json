@@ -56,6 +56,7 @@
     "@actions/core": "3.0.0",
     "@alextheman/utility": "5.9.0",
     "execa": "9.6.1",
+    "tempy": "3.2.0",
     "zod": "4.3.6"
   }
 }
