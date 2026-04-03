@@ -36001,6 +36001,8 @@ async function safeNpmDependencyGlobalInstall({ packageName, versionRange, packa
 	});
 	console.info(logMessage);
 	await runCommandAndLogToConsole`${packageManager} install -g ${packageName}@${installRange}`;
+	const { stdout: installedVersion } = await execa`${packageName} --version`;
+	console.info(`Installed ${packageName}@${new VersionNumber$1(installedVersion.trim())}`);
 }
 //#endregion
 //#region src/utility/getOptionalInput.ts
