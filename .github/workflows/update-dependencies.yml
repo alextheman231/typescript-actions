@@ -1,0 +1,21 @@
+name: Update Dependencies
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 21 * * 5
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-dependencies:
+    if: ${{ github.repository == 'alextheman231/typescript-actions' }}
+    uses: alextheman231/github-actions/.github/workflows/update-dependencies.yml@37105e9531353a1e0d4914cf954e10efe03a4bdf # v11.0.0
+    secrets:
+      APP_ID: ${{ secrets.ALEX_UP_BOT_APP_ID }}
+      APP_PRIVATE_KEY: ${{ secrets.ALEX_UP_BOT_PRIVATE_KEY }}
+    with:
+      update_pnpm: true
+      update_javascript_dependencies: true
+      update_actions: true
