@@ -1,6 +1,5 @@
 import type { DependencyGroup, PackageManager } from "@alextheman/utility/internal";
 
-import { VersionNumber } from "@alextheman/utility";
 import { getDependenciesFromGroup, getPackageJsonContents } from "@alextheman/utility/internal";
 import { execa } from "execa";
 
@@ -38,7 +37,7 @@ async function safeNpmDependencyGlobalInstall({
   console.info(logMessage);
   await runCommandAndLogToConsole`${packageManager} install -g ${packageName}@${installRange}`;
   const { stdout: installedVersion } = await execa`${packageName} --version`;
-  console.info(`Installed ${packageName}@${new VersionNumber(installedVersion.trim())}`);
+  console.info(`Installed ${packageName}@${installedVersion}`);
 }
 
 export default safeNpmDependencyGlobalInstall;
