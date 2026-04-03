@@ -35975,7 +35975,7 @@ const PackageManager = {
 const ResolvedFromMessage = {
 	WORKFLOW_INPUT: "resolved from workflow input",
 	PACKAGE_JSON: "resolved from package.json",
-	FALLBACK: "fallback: not found in package.json, no version_range provided, strict_version_resolution=false"
+	FALLBACK: "fallback: not found in package.json, no version-range provided, strict-version-resolution=false"
 };
 function getInstallVersion({ dependencies, packageName, versionRange, strictVersionResolution }) {
 	if (versionRange) return [versionRange, `Installing ${packageName}@${versionRange} (${ResolvedFromMessage.WORKFLOW_INPUT})`];
@@ -36014,11 +36014,11 @@ function getOptionalInput(name) {
 //#region src/safe-npm-dependency-global-install/index.ts
 (async () => {
 	await safeNpmDependencyGlobalInstall({
-		packageName: getInput("package_name", { required: true }),
-		versionRange: getOptionalInput("version_range"),
-		packageManager: parseZodSchema$1(zod_default.enum(PackageManager), getOptionalInput("package_manager") ?? PackageManager.NPM),
-		dependencyGroup: parseZodSchema$1(zod_default.enum(DependencyGroup), getOptionalInput("dependency_group") ?? DependencyGroup.DEPENDENCIES),
-		strictVersionResolution: getBooleanInput("strict_version_resolution")
+		packageName: getInput("package-name", { required: true }),
+		versionRange: getOptionalInput("version-range"),
+		packageManager: parseZodSchema$1(zod_default.enum(PackageManager), getOptionalInput("package-manager") ?? PackageManager.NPM),
+		dependencyGroup: parseZodSchema$1(zod_default.enum(DependencyGroup), getOptionalInput("dependency-group") ?? DependencyGroup.DEPENDENCIES),
+		strictVersionResolution: getBooleanInput("strict-version-resolution")
 	});
 })();
 //#endregion
