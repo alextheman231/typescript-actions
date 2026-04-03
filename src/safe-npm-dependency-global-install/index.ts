@@ -8,16 +8,16 @@ import getOptionalInput from "src/utility/getOptionalInput";
 
 (async () => {
   await safeNpmDependencyGlobalInstall({
-    packageName: getInput("package_name", { required: true }),
-    versionRange: getOptionalInput("version_range"),
+    packageName: getInput("package-name", { required: true }),
+    versionRange: getOptionalInput("version-range"),
     packageManager: parseZodSchema(
       z.enum(PackageManager),
-      getOptionalInput("package_manager") ?? PackageManager.NPM,
+      getOptionalInput("package-manager") ?? PackageManager.NPM,
     ),
     dependencyGroup: parseZodSchema(
       z.enum(DependencyGroup),
-      getOptionalInput("dependency_group") ?? DependencyGroup.DEPENDENCIES,
+      getOptionalInput("dependency-group") ?? DependencyGroup.DEPENDENCIES,
     ),
-    strictVersionResolution: getBooleanInput("strict_version_resolution"),
+    strictVersionResolution: getBooleanInput("strict-version-resolution"),
   });
 })();

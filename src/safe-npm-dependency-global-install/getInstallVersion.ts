@@ -13,7 +13,7 @@ export const ResolvedFromMessage = {
   WORKFLOW_INPUT: "resolved from workflow input",
   PACKAGE_JSON: "resolved from package.json",
   FALLBACK:
-    "fallback: not found in package.json, no version_range provided, strict_version_resolution=false",
+    "fallback: not found in package.json, no version-range provided, strict-version-resolution=false",
 } as const;
 export type ResolvedFromMessage = CreateEnumType<typeof ResolvedFromMessage>;
 
