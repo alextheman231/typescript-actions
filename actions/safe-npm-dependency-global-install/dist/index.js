@@ -1,13 +1,15 @@
 import { createRequire } from "node:module";
 import "os";
 import os, { EOL } from "os";
-import * as fs$3 from "fs";
+import crypto from "crypto";
+import * as fs$4 from "fs";
 import { constants, promises } from "fs";
 import * as path$4 from "path";
 import * as events from "events";
-import { Duplex, PassThrough, Readable, Transform, Writable, getDefaultHighWaterMark } from "node:stream";
+import { promisify } from "util";
+import stream, { Duplex, PassThrough, Readable, Transform, Writable, getDefaultHighWaterMark } from "node:stream";
 import { Buffer as Buffer$1 } from "node:buffer";
-import { aborted, callbackify, debuglog, inspect, promisify, stripVTControlCharacters } from "node:util";
+import { aborted, callbackify, debuglog, inspect, promisify as promisify$1, stripVTControlCharacters } from "node:util";
 import { EventEmitter, addAbortListener, on, once, setMaxListeners } from "node:events";
 import { fileURLToPath } from "node:url";
 import "child_process";
@@ -18,11 +20,11 @@ import process$1, { execArgv, execPath, hrtime, platform } from "node:process";
 import tty from "node:tty";
 import path from "node:path";
 import { scheduler, setImmediate as setImmediate$1, setTimeout as setTimeout$2 } from "node:timers/promises";
-import { constants as constants$1 } from "node:os";
+import os$1, { constants as constants$1 } from "node:os";
 import { serialize } from "node:v8";
-import { appendFileSync, createReadStream, createWriteStream, readFileSync, statSync, writeFileSync } from "node:fs";
+import fs, { appendFileSync, createReadStream, createWriteStream, promises as promises$1, readFileSync, statSync, writeFileSync } from "node:fs";
 import { finished } from "node:stream/promises";
-import { readFile } from "node:fs/promises";
+import fsPromises, { readFile } from "node:fs/promises";
 //#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -877,7 +879,7 @@ var require_util$7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const assert$27 = __require("node:assert");
 	const { kDestroyed, kBodyUsed, kListeners, kBody } = require_symbols$4();
 	const { IncomingMessage } = __require("node:http");
-	const stream = __require("node:stream");
+	const stream$1 = __require("node:stream");
 	const net$2 = __require("node:net");
 	const { Blob: Blob$3 } = __require("node:buffer");
 	const nodeUtil$3 = __require("node:util");
@@ -1005,7 +1007,7 @@ var require_util$7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return null;
 	}
 	function isDestroyed(body) {
-		return body && !!(body.destroyed || body[kDestroyed] || stream.isDestroyed?.(body));
+		return body && !!(body.destroyed || body[kDestroyed] || stream$1.isDestroyed?.(body));
 	}
 	function destroy(stream, err) {
 		if (stream == null || !isStream(stream) || isDestroyed(stream)) return;
@@ -1102,13 +1104,13 @@ var require_util$7 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 	}
 	function isDisturbed(body) {
-		return !!(body && (stream.isDisturbed(body) || body[kBodyUsed]));
+		return !!(body && (stream$1.isDisturbed(body) || body[kBodyUsed]));
 	}
 	function isErrored(body) {
-		return !!(body && stream.isErrored(body));
+		return !!(body && stream$1.isErrored(body));
 	}
 	function isReadable(body) {
-		return !!(body && stream.isReadable(body));
+		return !!(body && stream$1.isReadable(body));
 	}
 	function getSocketInfo(socket) {
 		return {
@@ -5759,7 +5761,7 @@ var require_client_h1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#region node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/dispatcher/client-h2.js
 var require_client_h2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const assert$19 = __require("node:assert");
-	const { pipeline: pipeline$2 } = __require("node:stream");
+	const { pipeline: pipeline$3 } = __require("node:stream");
 	const util = require_util$7();
 	const { RequestContentLengthMismatchError, RequestAbortedError, SocketError, InformationalError } = require_errors();
 	const { kUrl, kReset, kClient, kRunning, kPending, kQueue, kPendingIdx, kRunningIdx, kError, kSocket, kStrictContentLength, kOnError, kMaxConcurrentStreams, kHTTP2Session, kResume, kSize, kHTTPContext } = require_symbols$4();
@@ -6073,7 +6075,7 @@ var require_client_h2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	}
 	function writeStream(abort, socket, expectsPayload, h2stream, body, client, request, contentLength) {
 		assert$19(contentLength !== 0 || client[kRunning] === 0, "stream body cannot be pipelined");
-		const pipe = pipeline$2(body, h2stream, (err) => {
+		const pipe = pipeline$3(body, h2stream, (err) => {
 			if (err) {
 				util.destroy(pipe, err);
 				abort(err);
@@ -9014,7 +9016,7 @@ var require_mock_interceptor = /* @__PURE__ */ __commonJSMin(((exports, module) 
 //#endregion
 //#region node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/mock/mock-client.js
 var require_mock_client = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { promisify: promisify$2 } = __require("node:util");
+	const { promisify: promisify$3 } = __require("node:util");
 	const Client = require_client();
 	const { buildMockDispatch } = require_mock_utils();
 	const { kDispatches, kMockAgent, kClose, kOriginalClose, kOrigin, kOriginalDispatch, kConnected } = require_mock_symbols();
@@ -9047,7 +9049,7 @@ var require_mock_client = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return new MockInterceptor(opts, this[kDispatches]);
 		}
 		async [kClose]() {
-			await promisify$2(this[kOriginalClose])();
+			await promisify$3(this[kOriginalClose])();
 			this[kConnected] = 0;
 			this[kMockAgent][Symbols.kClients].delete(this[kOrigin]);
 		}
@@ -9057,7 +9059,7 @@ var require_mock_client = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/mock/mock-pool.js
 var require_mock_pool = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { promisify: promisify$1 } = __require("node:util");
+	const { promisify: promisify$2 } = __require("node:util");
 	const Pool = require_pool();
 	const { buildMockDispatch } = require_mock_utils();
 	const { kDispatches, kMockAgent, kClose, kOriginalClose, kOrigin, kOriginalDispatch, kConnected } = require_mock_symbols();
@@ -9090,7 +9092,7 @@ var require_mock_pool = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return new MockInterceptor(opts, this[kDispatches]);
 		}
 		async [kClose]() {
-			await promisify$1(this[kOriginalClose])();
+			await promisify$2(this[kOriginalClose])();
 			this[kConnected] = 0;
 			this[kMockAgent][Symbols.kClients].delete(this[kOrigin]);
 		}
@@ -10879,7 +10881,7 @@ var require_fetch = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	const { safelyExtractBody, extractBody } = require_body();
 	const { redirectStatusSet, nullBodyStatus, safeMethodsSet, requestBodyHeader, subresourceSet } = require_constants$2();
 	const EE = __require("node:events");
-	const { Readable: Readable$1, pipeline: pipeline$1, finished: finished$1 } = __require("node:stream");
+	const { Readable: Readable$1, pipeline: pipeline$2, finished: finished$1 } = __require("node:stream");
 	const { addAbortListener, isErrored, isReadable, bufferToLowerCasedHeaderName } = require_util$7();
 	const { dataURLProcessor, serializeAMimeType, minimizeSupportedMimeType } = require_data_url();
 	const { getGlobalDispatcher } = require_global();
@@ -11519,7 +11521,7 @@ var require_fetch = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						status,
 						statusText,
 						headersList,
-						body: decoders.length ? pipeline$1(this.body, ...decoders, (err) => {
+						body: decoders.length ? pipeline$2(this.body, ...decoders, (err) => {
 							if (err) this.onError(err);
 						}).on("error", onError) : this.body.on("error", onError)
 					});
@@ -15041,7 +15043,7 @@ var require_eventsource_stream = /* @__PURE__ */ __commonJSMin(((exports, module
 //#endregion
 //#region node_modules/.pnpm/undici@6.24.1/node_modules/undici/lib/web/eventsource/eventsource.js
 var require_eventsource = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const { pipeline } = __require("node:stream");
+	const { pipeline: pipeline$1 } = __require("node:stream");
 	const { fetching } = require_fetch();
 	const { makeRequest } = require_request();
 	const { webidl } = require_webidl();
@@ -15240,7 +15242,7 @@ var require_eventsource = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						this.dispatchEvent(createFastMessageEvent(event.type, event.options));
 					}
 				});
-				pipeline(response.body.stream, eventSourceStream, (error) => {
+				pipeline$1(response.body.stream, eventSourceStream, (error) => {
 					if (error?.aborted === false) {
 						this.close();
 						this.dispatchEvent(new Event("error"));
@@ -15831,9 +15833,9 @@ var __awaiter$5 = function(thisArg, _arguments, P, generator) {
 		step((generator = generator.apply(thisArg, _arguments || [])).next());
 	});
 };
-const { chmod, copyFile, lstat, mkdir, open, readdir, rename, rm, rmdir, stat, symlink, unlink } = fs$3.promises;
+const { chmod, copyFile, lstat, mkdir, open, readdir, rename, rm, rmdir, stat, symlink, unlink } = fs$4.promises;
 const IS_WINDOWS$1 = process.platform === "win32";
-fs$3.constants.O_RDONLY;
+fs$4.constants.O_RDONLY;
 /**
 * On OSX/Linux, true if path starts with '/'. On Windows, true for paths like:
 * \, \hello, \\hello\share, C:, and C:\hello (and corresponding alternate separator cases).
@@ -30059,7 +30061,7 @@ const handleCommand = (filePath, rawArguments, rawOptions) => {
 var require_windows = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = isexe;
 	isexe.sync = sync;
-	var fs$2 = __require("fs");
+	var fs$3 = __require("fs");
 	function checkPathExt(path, options) {
 		var pathext = options.pathExt !== void 0 ? options.pathExt : process.env.PATHEXT;
 		if (!pathext) return true;
@@ -30076,12 +30078,12 @@ var require_windows = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		return checkPathExt(path, options);
 	}
 	function isexe(path, options, cb) {
-		fs$2.stat(path, function(er, stat) {
+		fs$3.stat(path, function(er, stat) {
 			cb(er, er ? false : checkStat(stat, path, options));
 		});
 	}
 	function sync(path, options) {
-		return checkStat(fs$2.statSync(path), path, options);
+		return checkStat(fs$3.statSync(path), path, options);
 	}
 }));
 //#endregion
@@ -30089,14 +30091,14 @@ var require_windows = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 var require_mode = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = isexe;
 	isexe.sync = sync;
-	var fs$1 = __require("fs");
+	var fs$2 = __require("fs");
 	function isexe(path, options, cb) {
-		fs$1.stat(path, function(er, stat) {
+		fs$2.stat(path, function(er, stat) {
 			cb(er, er ? false : checkStat(stat, options));
 		});
 	}
 	function sync(path, options) {
-		return checkStat(fs$1.statSync(path), options);
+		return checkStat(fs$2.statSync(path), options);
 	}
 	function checkStat(stat, options) {
 		return stat.isFile() && checkMode(stat, options);
@@ -30311,16 +30313,16 @@ var require_shebang_command = /* @__PURE__ */ __commonJSMin(((exports, module) =
 //#endregion
 //#region node_modules/.pnpm/cross-spawn@7.0.6/node_modules/cross-spawn/lib/util/readShebang.js
 var require_readShebang = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	const fs = __require("fs");
+	const fs$1 = __require("fs");
 	const shebangCommand = require_shebang_command();
 	function readShebang(command) {
 		const size = 150;
 		const buffer = Buffer.alloc(size);
 		let fd;
 		try {
-			fd = fs.openSync(command, "r");
-			fs.readSync(fd, buffer, 0, size, 0);
-			fs.closeSync(fd);
+			fd = fs$1.openSync(command, "r");
+			fs$1.readSync(fd, buffer, 0, size, 0);
+			fs$1.closeSync(fd);
 		} catch (e) {}
 		return shebangCommand(buffer.toString());
 	}
@@ -30455,7 +30457,7 @@ function pathKey(options = {}) {
 	if (platform !== "win32") return "PATH";
 	return Object.keys(env).reverse().find((key) => key.toUpperCase() === "PATH") || "Path";
 }
-promisify(execFile);
+promisify$1(execFile);
 function toPath(urlOrPath) {
 	return urlOrPath instanceof URL ? fileURLToPath(urlOrPath) : urlOrPath;
 }
@@ -31380,7 +31382,7 @@ const sendOneMessage = async ({ anyProcess, methodName, isSubprocess, wrappedMes
 };
 const getSendMethod = (anyProcess) => {
 	if (PROCESS_SEND_METHODS.has(anyProcess)) return PROCESS_SEND_METHODS.get(anyProcess);
-	const sendMethod = promisify(anyProcess.send.bind(anyProcess));
+	const sendMethod = promisify$1(anyProcess.send.bind(anyProcess));
 	PROCESS_SEND_METHODS.set(anyProcess, sendMethod);
 	return sendMethod;
 };
@@ -35950,6 +35952,14 @@ function getDependenciesFromGroup(packageInfo, dependencyGroup) {
 		devDependencies: parseZodSchema(zod_default.record(zod_default.string(), zod_default.string()), packageInfo.devDependencies ?? {})
 	}[dependencyGroup];
 }
+async function getExpectedTgzName(packagePath, packageManager) {
+	const { stdout: rawPackedTgzData } = await execa({ cwd: packagePath })`${packageManager} pack --json --dry-run`;
+	const packedTgzData = parseJsonFromStdout(rawPackedTgzData);
+	const parsedPackedTgzData = parseZodSchema(packageManager === "pnpm" ? zod_default.object({ filename: zod_default.string() }) : zod_default.array(zod_default.object({ filename: zod_default.string() })), packedTgzData, new DataError(packedTgzData, "AMBIGUOUS_EXPECTED_FILE_NAME", "Could not figure out the expected filename."));
+	const [normalisedTgzMetadata] = Array.isArray(parsedPackedTgzData) ? parsedPackedTgzData : [parsedPackedTgzData];
+	const { filename: expectedTgzFileName } = normalisedTgzMetadata;
+	return expectedTgzFileName;
+}
 function getPackageJsonPath(directory) {
 	return path.join(...directory.endsWith("package.json") ? [directory] : [directory, "package.json"]);
 }
@@ -35970,6 +35980,145 @@ const PackageManager = {
 	NPM: "npm",
 	PNPM: "pnpm"
 };
+function parseJsonFromStdout(stdout) {
+	const start = Math.min(...["[", "{"].map((character) => {
+		return stdout.indexOf(character);
+	}).filter((index) => {
+		return index !== -1;
+	}));
+	if (!Number.isFinite(start)) throw new DataError({ stdout }, "NO_JSON_FOUND_IN_OUTPUT", "No JSON found in output");
+	return JSON.parse(stdout.slice(start));
+}
+//#endregion
+//#region node_modules/.pnpm/crypto-random-string@4.0.0/node_modules/crypto-random-string/index.js
+const randomBytesAsync = promisify(crypto.randomBytes);
+const urlSafeCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~".split("");
+const numericCharacters = "0123456789".split("");
+const distinguishableCharacters = "CDEHKMPRTUWXY012458".split("");
+const asciiPrintableCharacters = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~".split("");
+const alphanumericCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
+const generateForCustomCharacters = (length, characters) => {
+	const characterCount = characters.length;
+	const maxValidSelector = Math.floor(65536 / characterCount) * characterCount - 1;
+	const entropyLength = 2 * Math.ceil(1.1 * length);
+	let string = "";
+	let stringLength = 0;
+	while (stringLength < length) {
+		const entropy = crypto.randomBytes(entropyLength);
+		let entropyPosition = 0;
+		while (entropyPosition < entropyLength && stringLength < length) {
+			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			entropyPosition += 2;
+			if (entropyValue > maxValidSelector) continue;
+			string += characters[entropyValue % characterCount];
+			stringLength++;
+		}
+	}
+	return string;
+};
+const generateForCustomCharactersAsync = async (length, characters) => {
+	const characterCount = characters.length;
+	const maxValidSelector = Math.floor(65536 / characterCount) * characterCount - 1;
+	const entropyLength = 2 * Math.ceil(1.1 * length);
+	let string = "";
+	let stringLength = 0;
+	while (stringLength < length) {
+		const entropy = await randomBytesAsync(entropyLength);
+		let entropyPosition = 0;
+		while (entropyPosition < entropyLength && stringLength < length) {
+			const entropyValue = entropy.readUInt16LE(entropyPosition);
+			entropyPosition += 2;
+			if (entropyValue > maxValidSelector) continue;
+			string += characters[entropyValue % characterCount];
+			stringLength++;
+		}
+	}
+	return string;
+};
+const generateRandomBytes = (byteLength, type, length) => crypto.randomBytes(byteLength).toString(type).slice(0, length);
+const generateRandomBytesAsync = async (byteLength, type, length) => {
+	return (await randomBytesAsync(byteLength)).toString(type).slice(0, length);
+};
+const allowedTypes = new Set([
+	void 0,
+	"hex",
+	"base64",
+	"url-safe",
+	"numeric",
+	"distinguishable",
+	"ascii-printable",
+	"alphanumeric"
+]);
+const createGenerator = (generateForCustomCharacters, generateRandomBytes) => ({ length, type, characters }) => {
+	if (!(length >= 0 && Number.isFinite(length))) throw new TypeError("Expected a `length` to be a non-negative finite number");
+	if (type !== void 0 && characters !== void 0) throw new TypeError("Expected either `type` or `characters`");
+	if (characters !== void 0 && typeof characters !== "string") throw new TypeError("Expected `characters` to be string");
+	if (!allowedTypes.has(type)) throw new TypeError(`Unknown type: ${type}`);
+	if (type === void 0 && characters === void 0) type = "hex";
+	if (type === "hex" || type === void 0 && characters === void 0) return generateRandomBytes(Math.ceil(length * .5), "hex", length);
+	if (type === "base64") return generateRandomBytes(Math.ceil(length * .75), "base64", length);
+	if (type === "url-safe") return generateForCustomCharacters(length, urlSafeCharacters);
+	if (type === "numeric") return generateForCustomCharacters(length, numericCharacters);
+	if (type === "distinguishable") return generateForCustomCharacters(length, distinguishableCharacters);
+	if (type === "ascii-printable") return generateForCustomCharacters(length, asciiPrintableCharacters);
+	if (type === "alphanumeric") return generateForCustomCharacters(length, alphanumericCharacters);
+	if (characters.length === 0) throw new TypeError("Expected `characters` string length to be greater than or equal to 1");
+	if (characters.length > 65536) throw new TypeError("Expected `characters` string length to be less or equal to 65536");
+	return generateForCustomCharacters(length, characters.split(""));
+};
+const cryptoRandomString = createGenerator(generateForCustomCharacters, generateRandomBytes);
+cryptoRandomString.async = createGenerator(generateForCustomCharactersAsync, generateRandomBytesAsync);
+//#endregion
+//#region node_modules/.pnpm/unique-string@3.0.0/node_modules/unique-string/index.js
+function uniqueString() {
+	return cryptoRandomString({ length: 32 });
+}
+//#endregion
+//#region node_modules/.pnpm/temp-dir@3.0.0/node_modules/temp-dir/index.js
+const temporaryDirectory$1 = await promises$1.realpath(os$1.tmpdir());
+promisify$1(stream.pipeline);
+function assertSafePathComponent(pathComponent) {
+	if (typeof pathComponent !== "string") throw new TypeError(`Expected a string, got ${typeof pathComponent}`);
+	const trimmed = pathComponent.trim();
+	if (!(trimmed !== "" && trimmed !== "." && trimmed !== ".." && !pathComponent.includes("/") && !pathComponent.includes("\\") && !pathComponent.includes("\0"))) throw new Error(`Unsafe path component: ${JSON.stringify(pathComponent)}`);
+}
+function resolveParentDirectory(parentDirectory, rootDirectory) {
+	assertSafePathComponent(parentDirectory);
+	const base = rootDirectory ?? temporaryDirectory$1;
+	const resolved = path.join(base, parentDirectory);
+	fs.mkdirSync(resolved, { recursive: true });
+	return resolved;
+}
+const getPath = (prefix = "", { parentDirectory, rootDirectory } = {}) => {
+	if (prefix) assertSafePathComponent(prefix);
+	if (rootDirectory !== void 0) {
+		if (!path.isAbsolute(rootDirectory)) throw new Error("The `rootDirectory` option must be an absolute path");
+		fs.mkdirSync(rootDirectory, { recursive: true });
+	}
+	const parent = parentDirectory ? resolveParentDirectory(parentDirectory, rootDirectory) : rootDirectory ?? temporaryDirectory$1;
+	return path.join(parent, prefix + uniqueString());
+};
+async function runTask(temporaryPath, callback) {
+	try {
+		return await callback(temporaryPath);
+	} finally {
+		await fsPromises.rm(temporaryPath, {
+			recursive: true,
+			force: true,
+			maxRetries: 10,
+			retryDelay: 100
+		});
+	}
+}
+function temporaryDirectory({ prefix = "", parentDirectory, rootDirectory } = {}) {
+	const directory = getPath(prefix, {
+		parentDirectory,
+		rootDirectory
+	});
+	fs.mkdirSync(directory, { recursive: true });
+	return directory;
+}
+const temporaryDirectoryTask = async (callback, options) => runTask(temporaryDirectory(options), callback);
 //#endregion
 //#region src/safe-npm-dependency-global-install/getInstallVersion.ts
 const ResolvedFromMessage = {
@@ -35990,11 +36139,23 @@ function getInstallVersion({ dependencies, packageName, versionRange, strictVers
 }
 //#endregion
 //#region src/safe-npm-dependency-global-install/safeNpmDependencyGlobalInstall.ts
-async function safeNpmDependencyGlobalInstall({ packageName, versionRange, packageManager, dependencyGroup, strictVersionResolution }) {
-	const dependencies = getDependenciesFromGroup(await getPackageJsonContents(process.cwd(), { strict: strictVersionResolution }) ?? {}, dependencyGroup);
+async function safeNpmDependencyGlobalInstall({ packageName, versionRange, packageManager, dependencyGroup, strictVersionResolution, selfInstall }) {
 	const runCommandAndLogToConsole = execa({ stdio: "inherit" });
+	if (selfInstall) {
+		await temporaryDirectoryTask(async (temporaryPath) => {
+			console.info("Installing from the current repository...");
+			await runCommandAndLogToConsole`${packageManager} pack --pack-destination ${temporaryPath}`;
+			const tarballName = await getExpectedTgzName(process.cwd(), packageManager);
+			const tarballPath = path.join(temporaryPath, tarballName);
+			console.info(`Installing the tarball from ${tarballPath}`);
+			await runCommandAndLogToConsole`${packageManager} install -g file:${tarballPath}`;
+			const { stdout: installedVersion } = await execa`${packageName} --version`;
+			console.info(`Installed ${packageName}@${installedVersion}`);
+		});
+		return;
+	}
 	const [installRange, logMessage] = getInstallVersion({
-		dependencies,
+		dependencies: getDependenciesFromGroup(await getPackageJsonContents(process.cwd(), { strict: strictVersionResolution }) ?? {}, dependencyGroup),
 		packageName,
 		versionRange,
 		strictVersionResolution
@@ -36018,7 +36179,8 @@ function getOptionalInput(name) {
 		versionRange: getOptionalInput("version-range"),
 		packageManager: parseZodSchema$1(zod_default.enum(PackageManager), getOptionalInput("package-manager") ?? PackageManager.NPM),
 		dependencyGroup: parseZodSchema$1(zod_default.enum(DependencyGroup), getOptionalInput("dependency-group") ?? DependencyGroup.DEPENDENCIES),
-		strictVersionResolution: getBooleanInput("strict-version-resolution")
+		strictVersionResolution: getBooleanInput("strict-version-resolution"),
+		selfInstall: getBooleanInput("self-install")
 	});
 })();
 //#endregion
