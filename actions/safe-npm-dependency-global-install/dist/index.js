@@ -12,7 +12,6 @@ import { EventEmitter, addAbortListener, on, once, setMaxListeners } from "node:
 import { fileURLToPath } from "node:url";
 import "child_process";
 import "timers";
-import { DependencyGroup, PackageManager, getDependenciesFromGroup, getPackageJsonContents } from "@alextheman/utility/internal";
 import { ChildProcess, execFile, spawn, spawnSync } from "node:child_process";
 import { StringDecoder } from "node:string_decoder";
 import process$1, { execArgv, execPath, hrtime, platform } from "node:process";
@@ -23,6 +22,7 @@ import { constants as constants$1 } from "node:os";
 import { serialize } from "node:v8";
 import { appendFileSync, createReadStream, createWriteStream, readFileSync, statSync, writeFileSync } from "node:fs";
 import { finished } from "node:stream/promises";
+import { readFile } from "node:fs/promises";
 //#region \0rolldown/runtime.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -28818,11 +28818,11 @@ config(en_default());
 var zod_default = external_exports;
 //#endregion
 //#region node_modules/.pnpm/@alextheman+utility@5.9.0/node_modules/@alextheman/utility/dist/index.js
-const FILE_PATH_PATTERN = String.raw`(?<directory>.+)[\/\\](?<base>[^\/\\]+)`;
-RegExp(`^${FILE_PATH_PATTERN}$`);
+const FILE_PATH_PATTERN$1 = String.raw`(?<directory>.+)[\/\\](?<base>[^\/\\]+)`;
+RegExp(`^${FILE_PATH_PATTERN$1}$`);
 new RegExp(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`);
-const VERSION_NUMBER_PATTERN = String.raw`^(?:v)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
-const VERSION_NUMBER_REGEX = RegExp(`^${VERSION_NUMBER_PATTERN}$`);
+const VERSION_NUMBER_PATTERN$1 = String.raw`^(?:v)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
+const VERSION_NUMBER_REGEX$1 = RegExp(`^${VERSION_NUMBER_PATTERN$1}$`);
 /**
 * Creates a new array where each element is the result of the provided callback.
 *
@@ -28838,7 +28838,7 @@ const VERSION_NUMBER_REGEX = RegExp(`^${VERSION_NUMBER_PATTERN}$`);
 *
 * @returns An array of the callback results, or a Promise resolving to one if the callback is async.
 */
-function fillArray(callback, length = 1) {
+function fillArray$1(callback, length = 1) {
 	const outputArray = new Array(length).fill(null).map((_, index) => {
 		return callback(index);
 	});
@@ -28863,7 +28863,7 @@ function fillArray(callback, length = 1) {
 *
 * @returns An array of `[firstItem, secondItem]` tuples for each index in `firstArray`.
 */
-function paralleliseArrays(firstArray, secondArray) {
+function paralleliseArrays$1(firstArray, secondArray) {
 	const outputArray = [];
 	for (let i = 0; i < firstArray.length; i++) outputArray.push([firstArray[i], secondArray[i]]);
 	return outputArray;
@@ -28875,7 +28875,7 @@ function paralleliseArrays(firstArray, secondArray) {
 *
 * @template DataType - The type of the data that caused the error.
 */
-var DataError = class DataError extends Error {
+var DataError$1 = class DataError extends Error {
 	code;
 	data;
 	/**
@@ -28895,7 +28895,7 @@ var DataError = class DataError extends Error {
 	}
 	static checkCaughtError(error, options) {
 		if (DataError.check(error)) {
-			if (options?.expectedCode && error.code !== options.expectedCode) throw new Error(normaliseIndents`The error code on the thrown error does not match the expected error code.
+			if (options?.expectedCode && error.code !== options.expectedCode) throw new Error(normaliseIndents$1`The error code on the thrown error does not match the expected error code.
             
             Expected: ${options.expectedCode}
             Received: ${error.code}
@@ -28960,7 +28960,7 @@ var DataError = class DataError extends Error {
 *
 * @category Types
 */
-var VersionNumber = class VersionNumber {
+var VersionNumber$1 = class VersionNumber {
 	static NON_NEGATIVE_TUPLE_ERROR = "Input array must be a tuple of three non-negative integers.";
 	/** The major number. Increments when a feature is removed or changed in a way that is not backwards-compatible with the previous release. */
 	major = 0;
@@ -28977,24 +28977,24 @@ var VersionNumber = class VersionNumber {
 			this.minor = input.minor;
 			this.patch = input.patch;
 		} else if (typeof input === "string") {
-			if (!VERSION_NUMBER_REGEX.test(input)) throw new DataError({ input }, "INVALID_VERSION", `"${input}" is not a valid version number. Version numbers must be of the format "X.Y.Z" or "vX.Y.Z", where X, Y, and Z are non-negative integers.`);
+			if (!VERSION_NUMBER_REGEX$1.test(input)) throw new DataError$1({ input }, "INVALID_VERSION", `"${input}" is not a valid version number. Version numbers must be of the format "X.Y.Z" or "vX.Y.Z", where X, Y, and Z are non-negative integers.`);
 			const [major, minor, patch] = VersionNumber.formatString(input, { omitPrefix: true }).split(".").map((number) => {
-				return parseIntStrict(number);
+				return parseIntStrict$1(number);
 			});
 			this.major = major;
 			this.minor = minor;
 			this.patch = patch;
 		} else if (Array.isArray(input)) {
-			if (input.length !== 3) throw new DataError({ input }, "INVALID_LENGTH", VersionNumber.NON_NEGATIVE_TUPLE_ERROR);
+			if (input.length !== 3) throw new DataError$1({ input }, "INVALID_LENGTH", VersionNumber.NON_NEGATIVE_TUPLE_ERROR);
 			const [major, minor, patch] = input.map((number) => {
-				const parsedInteger = parseIntStrict(number?.toString());
-				if (parsedInteger < 0) throw new DataError({ input }, "NEGATIVE_INPUTS", VersionNumber.NON_NEGATIVE_TUPLE_ERROR);
+				const parsedInteger = parseIntStrict$1(number?.toString());
+				if (parsedInteger < 0) throw new DataError$1({ input }, "NEGATIVE_INPUTS", VersionNumber.NON_NEGATIVE_TUPLE_ERROR);
 				return parsedInteger;
 			});
 			this.major = major;
 			this.minor = minor;
 			this.patch = patch;
-		} else throw new DataError({ input }, "INVALID_INPUT", normaliseIndents`
+		} else throw new DataError$1({ input }, "INVALID_INPUT", normaliseIndents$1`
         The provided input can not be parsed into a valid version number.
         Expected either a string of format X.Y.Z or vX.Y.Z, a tuple of three numbers, or another \`VersionNumber\` instance.
       `);
@@ -29005,9 +29005,9 @@ var VersionNumber = class VersionNumber {
 	* @returns Either `"major"`, `"minor"`, or `"patch"`, depending on the version type.
 	*/
 	get type() {
-		if (this.minor === 0 && this.patch === 0) return VersionType.MAJOR;
-		if (this.patch === 0) return VersionType.MINOR;
-		return VersionType.PATCH;
+		if (this.minor === 0 && this.patch === 0) return VersionType$1.MAJOR;
+		if (this.patch === 0) return VersionType$1.MINOR;
+		return VersionType$1.PATCH;
 	}
 	static formatString(input, options) {
 		if (options?.omitPrefix) return input.startsWith("v") ? input.slice(1) : input;
@@ -29051,7 +29051,7 @@ var VersionNumber = class VersionNumber {
 	* @returns A new instance of `VersionNumber` with the increment applied.
 	*/
 	increment(incrementType, incrementAmount = 1) {
-		const incrementBy = parseIntStrict(String(incrementAmount));
+		const incrementBy = parseIntStrict$1(String(incrementAmount));
 		const calculatedRawVersion = {
 			major: [
 				this.major + incrementBy,
@@ -29072,7 +29072,7 @@ var VersionNumber = class VersionNumber {
 		try {
 			return new VersionNumber(calculatedRawVersion);
 		} catch (error) {
-			if (DataError.check(error) && error.code === "NEGATIVE_INPUTS") throw new DataError({
+			if (DataError$1.check(error) && error.code === "NEGATIVE_INPUTS") throw new DataError$1({
 				currentVersion: this.toString(),
 				calculatedRawVersion: `v${calculatedRawVersion.join(".")}`,
 				incrementAmount
@@ -29088,7 +29088,7 @@ var VersionNumber = class VersionNumber {
 	* @returns A stringified representation of the current version number, prefixed with `v`.
 	*/
 	[Symbol.toPrimitive](hint) {
-		if (hint === "number") throw new DataError({ thisVersion: this.toString() }, "INVALID_COERCION", "VersionNumber cannot be coerced to a number type.");
+		if (hint === "number") throw new DataError$1({ thisVersion: this.toString() }, "INVALID_COERCION", "VersionNumber cannot be coerced to a number type.");
 		return this.toString();
 	}
 	/**
@@ -29116,9 +29116,9 @@ zod_default.union([
 		zod_default.number(),
 		zod_default.number()
 	]),
-	zod_default.instanceof(VersionNumber)
+	zod_default.instanceof(VersionNumber$1)
 ]).transform((rawVersionNumber) => {
-	return new VersionNumber(rawVersionNumber);
+	return new VersionNumber$1(rawVersionNumber);
 });
 /**
 * Converts a string to an integer and throws an error if it cannot be converted.
@@ -29132,21 +29132,21 @@ zod_default.union([
 *
 * @returns The integer parsed from the input string.
 */
-function parseIntStrict(string, radix) {
+function parseIntStrict$1(string, radix) {
 	const trimmedString = string.trim();
 	const maxAllowedAlphabeticalCharacter = radix && radix > 10 && radix <= 36 ? String.fromCharCode(87 + radix - 1) : void 0;
-	if (!(radix && radix > 10 && radix <= 36 ? new RegExp(`^[+-]?[0-9a-${maxAllowedAlphabeticalCharacter}]+$`, "i") : /^[+-]?\d+$/).test(trimmedString)) throw new DataError(radix ? {
+	if (!(radix && radix > 10 && radix <= 36 ? new RegExp(`^[+-]?[0-9a-${maxAllowedAlphabeticalCharacter}]+$`, "i") : /^[+-]?\d+$/).test(trimmedString)) throw new DataError$1(radix ? {
 		string,
 		radix
 	} : { string }, "INTEGER_PARSING_ERROR", `Only numeric values${radix && radix > 10 && radix <= 36 ? ` or character${radix !== 11 ? "s" : ""} A${radix !== 11 ? `-${maxAllowedAlphabeticalCharacter?.toUpperCase()} ` : " "}` : " "}are allowed.`);
 	if (radix && radix < 10 && [...trimmedString.replace(/^[+-]/, "")].some((character) => {
 		return parseInt(character) >= radix;
-	})) throw new DataError({
+	})) throw new DataError$1({
 		string,
 		radix
 	}, "INTEGER_PARSING_ERROR", "Value contains one or more digits outside of the range of the given radix.");
 	const parseIntResult = parseInt(trimmedString, radix);
-	if (isNaN(parseIntResult)) throw new DataError({ string }, "INTEGER_PARSING_ERROR", "Value is not a valid integer.");
+	if (isNaN(parseIntResult)) throw new DataError$1({ string }, "INTEGER_PARSING_ERROR", "Value is not a valid integer.");
 	return parseIntResult;
 }
 /**
@@ -29169,31 +29169,31 @@ function parseIntStrict(string, radix) {
 *
 * @returns A new string with the strings and interpolations from the template applied.
 */
-function interpolate(strings, ...interpolations) {
+function interpolate$1(strings, ...interpolations) {
 	let result = "";
-	for (const [string, interpolation = ""] of paralleliseArrays(strings, interpolations)) result += string + interpolation;
+	for (const [string, interpolation = ""] of paralleliseArrays$1(strings, interpolations)) result += string + interpolation;
 	return result;
 }
-function calculateTabSize(line, whitespaceLength) {
+function calculateTabSize$1(line, whitespaceLength) {
 	const potentialWhitespacePart = line.slice(0, whitespaceLength);
 	const trimmedString = line.trimStart();
 	if (potentialWhitespacePart.trim() !== "") return 0;
 	const tabSize = line.length - (trimmedString.length + whitespaceLength);
 	return tabSize < 0 ? 0 : tabSize;
 }
-function getWhitespaceLength(lines) {
+function getWhitespaceLength$1(lines) {
 	const [firstNonEmptyLine] = lines.filter((line) => {
 		return line.trim() !== "";
 	});
 	return firstNonEmptyLine.length - firstNonEmptyLine.trimStart().length;
 }
-function reduceLines(lines, { preserveTabs = true }) {
+function reduceLines$1(lines, { preserveTabs = true }) {
 	const slicedLines = lines.slice(1);
 	const isFirstLineEmpty = lines[0].trim() === "";
-	const whitespaceLength = getWhitespaceLength(isFirstLineEmpty ? lines : slicedLines);
+	const whitespaceLength = getWhitespaceLength$1(isFirstLineEmpty ? lines : slicedLines);
 	return (isFirstLineEmpty ? slicedLines : lines).map((line) => {
-		const tabSize = calculateTabSize(line, whitespaceLength);
-		return (preserveTabs ? fillArray(() => {
+		const tabSize = calculateTabSize$1(line, whitespaceLength);
+		return (preserveTabs ? fillArray$1(() => {
 			return " ";
 		}, tabSize).join("") : "") + line.trimStart();
 	}).join("\n");
@@ -29224,18 +29224,18 @@ function reduceLines(lines, { preserveTabs = true }) {
 *
 * @returns An additional function to invoke, or a new string with the strings and interpolations from the template applied, and extraneous indents removed.
 */
-function normaliseIndents(first, ...args) {
+function normaliseIndents$1(first, ...args) {
 	if (typeof first === "object" && first !== null && !Array.isArray(first)) {
 		const options = first;
 		return (strings, ...interpolations) => {
-			return normaliseIndents(strings, ...interpolations, options);
+			return normaliseIndents$1(strings, ...interpolations, options);
 		};
 	}
 	const strings = first;
 	const options = typeof args[args.length - 1] === "object" && !Array.isArray(args[args.length - 1]) ? args.pop() : {};
-	return reduceLines(interpolate(strings, ...[...args]).split("\n"), options);
+	return reduceLines$1(interpolate$1(strings, ...[...args]).split("\n"), options);
 }
-function _parseZodSchema(parsedResult, input, onError) {
+function _parseZodSchema$1(parsedResult, input, onError) {
 	if (!parsedResult.success) {
 		if (onError) {
 			if (onError instanceof Error) throw onError;
@@ -29249,7 +29249,7 @@ function _parseZodSchema(parsedResult, input, onError) {
 			const code = issue.code.toUpperCase();
 			allErrorCodes[code] = (allErrorCodes[code] ?? 0) + 1;
 		}
-		throw new DataError({ input }, Object.entries(allErrorCodes).toSorted(([_, firstCount], [__, secondCount]) => {
+		throw new DataError$1({ input }, Object.entries(allErrorCodes).toSorted(([_, firstCount], [__, secondCount]) => {
 			return secondCount - firstCount;
 		}).map(([code, count], _, allErrorCodes) => {
 			return allErrorCodes.length === 1 && count === 1 ? code : `${code}×${count}`;
@@ -29275,15 +29275,15 @@ function _parseZodSchema(parsedResult, input, onError) {
 *
 * @returns The parsed data from the Zod schema.
 */
-function parseZodSchema(schema, input, onError) {
-	return _parseZodSchema(schema.safeParse(input), input, onError);
+function parseZodSchema$1(schema, input, onError) {
+	return _parseZodSchema$1(schema.safeParse(input), input, onError);
 }
 /**
 * Represents the three common software version types.
 *
 * @category Types
 */
-const VersionType = {
+const VersionType$1 = {
 	MAJOR: "major",
 	MINOR: "minor",
 	PATCH: "patch"
@@ -35459,6 +35459,518 @@ createExeca(mapNode);
 createExeca(mapScriptAsync, {}, deepScriptOptions, setScriptSync);
 const { sendMessage, getOneMessage, getEachMessage, getCancelSignal } = getIpcExport();
 //#endregion
+//#region node_modules/.pnpm/@alextheman+utility@5.9.0/node_modules/@alextheman/utility/dist/internal/index.js
+const DependencyGroup = {
+	DEPENDENCIES: "dependencies",
+	DEV_DEPENDENCIES: "devDependencies"
+};
+/**
+* Creates a new array where each element is the result of the provided callback.
+*
+* If the callback returns at least one Promise, the entire result will be wrapped
+* in a `Promise` and resolved with `Promise.all`. Otherwise, a plain array is returned.
+*
+* @category Array Helpers
+*
+* @template ItemType - The return type of the callback (awaited if any items are a Promise) that becomes the type of the array items.
+*
+* @param callback - A function invoked with the current index. May return a value or a Promise.
+* @param length - The desired length of the resulting array.
+*
+* @returns An array of the callback results, or a Promise resolving to one if the callback is async.
+*/
+function fillArray(callback, length = 1) {
+	const outputArray = new Array(length).fill(null).map((_, index) => {
+		return callback(index);
+	});
+	if (outputArray.some((item) => {
+		return item instanceof Promise;
+	})) return Promise.all(outputArray);
+	return outputArray;
+}
+/**
+* Creates a new array of tuples, each containing the item at the given index from both arrays.
+*
+* If `secondArray` is shorter than `firstArray`, the second position in the tuple
+* will be `undefined`. Iteration always uses the length of the first array.
+*
+* @category Array Helpers
+*
+* @template FirstArrayItem
+* @template SecondArrayItem
+*
+* @param firstArray - The first array. Each item in this will take up the first tuple spot.
+* @param secondArray - The second array. Each item in this will take up the second tuple spot.
+*
+* @returns An array of `[firstItem, secondItem]` tuples for each index in `firstArray`.
+*/
+function paralleliseArrays(firstArray, secondArray) {
+	const outputArray = [];
+	for (let i = 0; i < firstArray.length; i++) outputArray.push([firstArray[i], secondArray[i]]);
+	return outputArray;
+}
+/**
+* Represents errors you may get that may've been caused by a specific piece of data.
+*
+* @category Types
+*
+* @template DataType - The type of the data that caused the error.
+*/
+var DataError = class DataError extends Error {
+	code;
+	data;
+	/**
+	* @param data - The data that caused the error.
+	* @param code - A standardised code (e.g. UNEXPECTED_DATA).
+	* @param message  - A human-readable error message (e.g. The data provided is invalid).
+	* @param options - Extra options to pass to super Error constructor.
+	*/
+	constructor(data, code = "INVALID_DATA", message = "The data provided is invalid", options) {
+		super(message, options);
+		if (Error.captureStackTrace) Error.captureStackTrace(this, new.target);
+		this.name = new.target.name;
+		this.code = code;
+		this.data = data;
+		Object.defineProperty(this, "message", { enumerable: true });
+		Object.setPrototypeOf(this, new.target.prototype);
+	}
+	static checkCaughtError(error, options) {
+		if (DataError.check(error)) {
+			if (options?.expectedCode && error.code !== options.expectedCode) throw new Error(normaliseIndents`The error code on the thrown error does not match the expected error code.
+            
+            Expected: ${options.expectedCode}
+            Received: ${error.code}
+            `, { cause: error });
+			return error;
+		}
+		throw error;
+	}
+	/**
+	* Checks whether the given input may have been caused by a DataError.
+	*
+	* @param input - The input to check.
+	*
+	* @returns `true` if the input is a DataError, and `false` otherwise. The type of the input will also be narrowed down to DataError if `true`.
+	*/
+	static check(input) {
+		if (input instanceof DataError) return true;
+		const data = input;
+		return typeof data === "object" && data !== null && typeof data.message === "string" && typeof data.code === "string" && "data" in data;
+	}
+	/**
+	* Gets the thrown `DataError` from a given function if one was thrown, and re-throws any other errors, or throws a default `DataError` if no error thrown.
+	*
+	* @param errorFunction - The function expected to throw the error.
+	* @param options - Extra options to apply.
+	*
+	* @throws {Error} Any other errors thrown by the `errorFunction` that are not a `DataError`.
+	* @throws {Error} If no `DataError` was thrown by the `errorFunction`
+	*
+	* @returns The `DataError` that was thrown by the `errorFunction`
+	*/
+	static expectError(errorFunction, options) {
+		try {
+			errorFunction();
+		} catch (error) {
+			return DataError.checkCaughtError(error, options);
+		}
+		throw new Error("Expected a DataError to be thrown but none was thrown");
+	}
+	/**
+	* Gets the thrown `DataError` from a given asynchronous function if one was thrown, and re-throws any other errors, or throws a default `DataError` if no error thrown.
+	*
+	* @param errorFunction - The function expected to throw the error.
+	* @param options - Extra options to apply.
+	*
+	* @throws {Error} Any other errors thrown by the `errorFunction` that are not a `DataError`.
+	* @throws {Error} If no `DataError` was thrown by the `errorFunction`
+	*
+	* @returns The `DataError` that was thrown by the `errorFunction`
+	*/
+	static async expectErrorAsync(errorFunction, options) {
+		try {
+			await errorFunction();
+		} catch (error) {
+			return DataError.checkCaughtError(error, options);
+		}
+		throw new Error("Expected a DataError to be thrown but none was thrown");
+	}
+};
+const FILE_PATH_PATTERN = String.raw`(?<directory>.+)[\/\\](?<base>[^\/\\]+)`;
+RegExp(`^${FILE_PATH_PATTERN}$`);
+new RegExp(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`);
+const VERSION_NUMBER_PATTERN = String.raw`^(?:v)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
+const VERSION_NUMBER_REGEX = RegExp(`^${VERSION_NUMBER_PATTERN}$`);
+/**
+* Represents a software version number, considered to be made up of a major, minor, and patch part.
+*
+* @category Types
+*/
+var VersionNumber = class VersionNumber {
+	static NON_NEGATIVE_TUPLE_ERROR = "Input array must be a tuple of three non-negative integers.";
+	/** The major number. Increments when a feature is removed or changed in a way that is not backwards-compatible with the previous release. */
+	major = 0;
+	/** The minor number. Increments when a new feature is added/deprecated and is expected to be backwards-compatible with the previous release. */
+	minor = 0;
+	/** The patch number. Increments when the next release is fixing a bug or doing a small refactor that should not be noticeable in practice. */
+	patch = 0;
+	/**
+	* @param input - The input to create a new instance of `VersionNumber` from.
+	*/
+	constructor(input) {
+		if (input instanceof VersionNumber) {
+			this.major = input.major;
+			this.minor = input.minor;
+			this.patch = input.patch;
+		} else if (typeof input === "string") {
+			if (!VERSION_NUMBER_REGEX.test(input)) throw new DataError({ input }, "INVALID_VERSION", `"${input}" is not a valid version number. Version numbers must be of the format "X.Y.Z" or "vX.Y.Z", where X, Y, and Z are non-negative integers.`);
+			const [major, minor, patch] = VersionNumber.formatString(input, { omitPrefix: true }).split(".").map((number) => {
+				return parseIntStrict(number);
+			});
+			this.major = major;
+			this.minor = minor;
+			this.patch = patch;
+		} else if (Array.isArray(input)) {
+			if (input.length !== 3) throw new DataError({ input }, "INVALID_LENGTH", VersionNumber.NON_NEGATIVE_TUPLE_ERROR);
+			const [major, minor, patch] = input.map((number) => {
+				const parsedInteger = parseIntStrict(number?.toString());
+				if (parsedInteger < 0) throw new DataError({ input }, "NEGATIVE_INPUTS", VersionNumber.NON_NEGATIVE_TUPLE_ERROR);
+				return parsedInteger;
+			});
+			this.major = major;
+			this.minor = minor;
+			this.patch = patch;
+		} else throw new DataError({ input }, "INVALID_INPUT", normaliseIndents`
+        The provided input can not be parsed into a valid version number.
+        Expected either a string of format X.Y.Z or vX.Y.Z, a tuple of three numbers, or another \`VersionNumber\` instance.
+      `);
+	}
+	/**
+	* Gets the current version type of the current instance of `VersionNumber`.
+	*
+	* @returns Either `"major"`, `"minor"`, or `"patch"`, depending on the version type.
+	*/
+	get type() {
+		if (this.minor === 0 && this.patch === 0) return VersionType.MAJOR;
+		if (this.patch === 0) return VersionType.MINOR;
+		return VersionType.PATCH;
+	}
+	static formatString(input, options) {
+		if (options?.omitPrefix) return input.startsWith("v") ? input.slice(1) : input;
+		return input.startsWith("v") ? input : `v${input}`;
+	}
+	/**
+	* Checks if the provided version numbers have the exact same major, minor, and patch numbers.
+	*
+	* @param firstVersion - The first version number to compare.
+	* @param secondVersion - The second version number to compare.
+	*
+	* @returns `true` if the provided version numbers have exactly the same major, minor, and patch numbers, and returns `false` otherwise.
+	*/
+	static isEqual(firstVersion, secondVersion) {
+		return firstVersion.major === secondVersion.major && firstVersion.minor === secondVersion.minor && firstVersion.patch === secondVersion.patch;
+	}
+	/**
+	* Get a formatted string representation of the current version number
+	*
+	* @param options - Options to apply to the string formatting.
+	*
+	* @returns A formatted string representation of the current version number with the options applied.
+	*/
+	format(options) {
+		let baseOutput = `${this.major}`;
+		if (!options?.omitMinor) {
+			baseOutput += `.${this.minor}`;
+			if (!options?.omitPatch) baseOutput += `.${this.patch}`;
+		}
+		return VersionNumber.formatString(baseOutput, { omitPrefix: options?.omitPrefix });
+	}
+	/**
+	* Increments the current version number by the given increment type, returning the result as a new reference in memory.
+	*
+	* @param incrementType - The type of increment. Can be one of the following:
+	* - `"major"`: Change the major version `v1.2.3` → `v2.0.0`
+	* - `"minor"`: Change the minor version `v1.2.3` → `v1.3.0`
+	* - `"patch"`: Change the patch version `v1.2.3` → `v1.2.4`
+	* @param incrementAmount - The amount to increment by (defaults to 1).
+	*
+	* @returns A new instance of `VersionNumber` with the increment applied.
+	*/
+	increment(incrementType, incrementAmount = 1) {
+		const incrementBy = parseIntStrict(String(incrementAmount));
+		const calculatedRawVersion = {
+			major: [
+				this.major + incrementBy,
+				0,
+				0
+			],
+			minor: [
+				this.major,
+				this.minor + incrementBy,
+				0
+			],
+			patch: [
+				this.major,
+				this.minor,
+				this.patch + incrementBy
+			]
+		}[incrementType];
+		try {
+			return new VersionNumber(calculatedRawVersion);
+		} catch (error) {
+			if (DataError.check(error) && error.code === "NEGATIVE_INPUTS") throw new DataError({
+				currentVersion: this.toString(),
+				calculatedRawVersion: `v${calculatedRawVersion.join(".")}`,
+				incrementAmount
+			}, "NEGATIVE_VERSION", "Cannot apply this increment amount as it would lead to a negative version number.");
+			else throw error;
+		}
+	}
+	/**
+	* Ensures that the VersionNumber behaves correctly when attempted to be coerced to a string.
+	*
+	* @param hint - Not used as of now, but generally used to help with numeric coercion, I think (which we most likely do not need for version numbers).
+	*
+	* @returns A stringified representation of the current version number, prefixed with `v`.
+	*/
+	[Symbol.toPrimitive](hint) {
+		if (hint === "number") throw new DataError({ thisVersion: this.toString() }, "INVALID_COERCION", "VersionNumber cannot be coerced to a number type.");
+		return this.toString();
+	}
+	/**
+	* Ensures that the VersionNumber behaves correctly when attempted to be converted to JSON.
+	*
+	* @returns A stringified representation of the current version number, prefixed with `v`.
+	*/
+	toJSON() {
+		return this.toString();
+	}
+	/**
+	* Get a string representation of the current version number.
+	*
+	* @returns A stringified representation of the current version number with the prefix.
+	*/
+	toString() {
+		const rawString = `${this.major}.${this.minor}.${this.patch}`;
+		return VersionNumber.formatString(rawString, { omitPrefix: false });
+	}
+};
+zod_default.union([
+	zod_default.string(),
+	zod_default.tuple([
+		zod_default.number(),
+		zod_default.number(),
+		zod_default.number()
+	]),
+	zod_default.instanceof(VersionNumber)
+]).transform((rawVersionNumber) => {
+	return new VersionNumber(rawVersionNumber);
+});
+/**
+* Converts a string to an integer and throws an error if it cannot be converted.
+*
+* @category Parsers
+*
+* @param string - A string to convert into a number.
+* @param radix - A value between 2 and 36 that specifies the base of the number in string. If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal. All other strings are considered decimal.
+*
+* @throws {DataError} If the provided string cannot safely be converted to an integer.
+*
+* @returns The integer parsed from the input string.
+*/
+function parseIntStrict(string, radix) {
+	const trimmedString = string.trim();
+	const maxAllowedAlphabeticalCharacter = radix && radix > 10 && radix <= 36 ? String.fromCharCode(87 + radix - 1) : void 0;
+	if (!(radix && radix > 10 && radix <= 36 ? new RegExp(`^[+-]?[0-9a-${maxAllowedAlphabeticalCharacter}]+$`, "i") : /^[+-]?\d+$/).test(trimmedString)) throw new DataError(radix ? {
+		string,
+		radix
+	} : { string }, "INTEGER_PARSING_ERROR", `Only numeric values${radix && radix > 10 && radix <= 36 ? ` or character${radix !== 11 ? "s" : ""} A${radix !== 11 ? `-${maxAllowedAlphabeticalCharacter?.toUpperCase()} ` : " "}` : " "}are allowed.`);
+	if (radix && radix < 10 && [...trimmedString.replace(/^[+-]/, "")].some((character) => {
+		return parseInt(character) >= radix;
+	})) throw new DataError({
+		string,
+		radix
+	}, "INTEGER_PARSING_ERROR", "Value contains one or more digits outside of the range of the given radix.");
+	const parseIntResult = parseInt(trimmedString, radix);
+	if (isNaN(parseIntResult)) throw new DataError({ string }, "INTEGER_PARSING_ERROR", "Value is not a valid integer.");
+	return parseIntResult;
+}
+/**
+* Returns the result of interpolating a template string when given the strings and interpolations separately.
+*
+* You can pass a template string directly by doing:
+*
+* ```
+* interpolate`Template string here`;
+* ```
+*
+* In this case, it will be functionally the same as if you just wrote the template string by itself.
+*
+* @category Tagged Template
+*
+* @template InterpolationsType - The type of the interpolations.
+*
+* @param strings - The strings from the template to process.
+* @param interpolations - An array of all interpolations from the template.
+*
+* @returns A new string with the strings and interpolations from the template applied.
+*/
+function interpolate(strings, ...interpolations) {
+	let result = "";
+	for (const [string, interpolation = ""] of paralleliseArrays(strings, interpolations)) result += string + interpolation;
+	return result;
+}
+function calculateTabSize(line, whitespaceLength) {
+	const potentialWhitespacePart = line.slice(0, whitespaceLength);
+	const trimmedString = line.trimStart();
+	if (potentialWhitespacePart.trim() !== "") return 0;
+	const tabSize = line.length - (trimmedString.length + whitespaceLength);
+	return tabSize < 0 ? 0 : tabSize;
+}
+function getWhitespaceLength(lines) {
+	const [firstNonEmptyLine] = lines.filter((line) => {
+		return line.trim() !== "";
+	});
+	return firstNonEmptyLine.length - firstNonEmptyLine.trimStart().length;
+}
+function reduceLines(lines, { preserveTabs = true }) {
+	const slicedLines = lines.slice(1);
+	const isFirstLineEmpty = lines[0].trim() === "";
+	const whitespaceLength = getWhitespaceLength(isFirstLineEmpty ? lines : slicedLines);
+	return (isFirstLineEmpty ? slicedLines : lines).map((line) => {
+		const tabSize = calculateTabSize(line, whitespaceLength);
+		return (preserveTabs ? fillArray(() => {
+			return " ";
+		}, tabSize).join("") : "") + line.trimStart();
+	}).join("\n");
+}
+/**
+* Applies any options if provided, then removes any extraneous indents from a multi-line template string.
+*
+* You can pass a template string directly by doing:
+*
+* ```typescript
+* normaliseIndents`Template string here
+*     with a new line
+*     and another new line`;
+* ```
+*
+* You may also pass the options first, then invoke the resulting function with a template string:
+*
+* ```typescript
+* normaliseIndents({ preserveTabs: false })`Template string here
+*     with a new line
+*     and another new line`;
+* ```
+*
+* @category Tagged Template
+*
+* @param first - The strings from the template to process, or the options to apply.
+* @param args - An array of all interpolations from the template.
+*
+* @returns An additional function to invoke, or a new string with the strings and interpolations from the template applied, and extraneous indents removed.
+*/
+function normaliseIndents(first, ...args) {
+	if (typeof first === "object" && first !== null && !Array.isArray(first)) {
+		const options = first;
+		return (strings, ...interpolations) => {
+			return normaliseIndents(strings, ...interpolations, options);
+		};
+	}
+	const strings = first;
+	const options = typeof args[args.length - 1] === "object" && !Array.isArray(args[args.length - 1]) ? args.pop() : {};
+	return reduceLines(interpolate(strings, ...[...args]).split("\n"), options);
+}
+function _parseZodSchema(parsedResult, input, onError) {
+	if (!parsedResult.success) {
+		if (onError) {
+			if (onError instanceof Error) throw onError;
+			else if (typeof onError === "function") {
+				const evaluatedError = onError(parsedResult.error);
+				if (evaluatedError instanceof Error) throw evaluatedError;
+			}
+		}
+		const allErrorCodes = {};
+		for (const issue of parsedResult.error.issues) {
+			const code = issue.code.toUpperCase();
+			allErrorCodes[code] = (allErrorCodes[code] ?? 0) + 1;
+		}
+		throw new DataError({ input }, Object.entries(allErrorCodes).toSorted(([_, firstCount], [__, secondCount]) => {
+			return secondCount - firstCount;
+		}).map(([code, count], _, allErrorCodes) => {
+			return allErrorCodes.length === 1 && count === 1 ? code : `${code}×${count}`;
+		}).join(","), `\n\n${zod_default.prettifyError(parsedResult.error)}\n`);
+	}
+	return parsedResult.data;
+}
+/**
+* An alternative function to zodSchema.parse() that can be used to strictly parse Zod schemas.
+*
+* NOTE: Use `parseZodSchemaAsync` if your schema includes an asynchronous function.
+*
+* @category Parsers
+*
+* @template SchemaType - The Zod schema type.
+* @template ErrorType - The type of error to throw on invalid data.
+*
+* @param schema - The Zod schema to use in parsing.
+* @param input - The data to parse.
+* @param onError - A custom error to throw on invalid data (defaults to `DataError`). May either be the error itself, or a function that returns the error or nothing. If nothing is returned, the default error is thrown instead.
+*
+* @throws {DataError} If the given data cannot be parsed according to the schema.
+*
+* @returns The parsed data from the Zod schema.
+*/
+function parseZodSchema(schema, input, onError) {
+	return _parseZodSchema(schema.safeParse(input), input, onError);
+}
+/**
+* Represents the three common software version types.
+*
+* @category Types
+*/
+const VersionType = {
+	MAJOR: "major",
+	MINOR: "minor",
+	PATCH: "patch"
+};
+/**
+* Get the dependencies from a given dependency group in `package.json`.
+*
+* @category Miscellaneous
+*
+* @param packageInfo - The data coming from `package.json`.
+* @param dependencyGroup - The group to get dependency information about (can be `dependencies` or `devDependencies`).
+*
+* @returns A record consisting of the package names and version ranges from the given dependency group.
+*/
+function getDependenciesFromGroup(packageInfo, dependencyGroup) {
+	return {
+		dependencies: parseZodSchema(zod_default.record(zod_default.string(), zod_default.string()), packageInfo.dependencies ?? {}),
+		devDependencies: parseZodSchema(zod_default.record(zod_default.string(), zod_default.string()), packageInfo.devDependencies ?? {})
+	}[dependencyGroup];
+}
+function getPackageJsonPath(directory) {
+	return path.join(...directory.endsWith("package.json") ? [directory] : [directory, "package.json"]);
+}
+function packageJsonNotFoundError(packagePath) {
+	return new DataError({ packagePath: getPackageJsonPath(packagePath) }, "PACKAGE_JSON_NOT_FOUND", "Could not find package.json in directory.");
+}
+async function getPackageJsonContents(directory, options) {
+	const { strict = true } = options ?? {};
+	try {
+		return JSON.parse(await readFile(getPackageJsonPath(directory), "utf-8"));
+	} catch (error) {
+		if (error instanceof Error && "code" in error && error.code === "ENOENT") if (strict) throw packageJsonNotFoundError(directory);
+		else return null;
+		throw error;
+	}
+}
+const PackageManager = {
+	NPM: "npm",
+	PNPM: "pnpm"
+};
+//#endregion
 //#region src/safe-npm-dependency-global-install/getInstallVersion.ts
 const ResolvedFromMessage = {
 	WORKFLOW_INPUT: "resolved from workflow input",
@@ -35469,7 +35981,7 @@ function getInstallVersion({ dependencies, packageName, versionRange, strictVers
 	if (versionRange) return [versionRange, `Installing ${packageName}@${versionRange} (${ResolvedFromMessage.WORKFLOW_INPUT})`];
 	else if (packageName in dependencies) return [dependencies[packageName], `Installing ${packageName}@${dependencies[packageName]} (${ResolvedFromMessage.PACKAGE_JSON})`];
 	else if (!strictVersionResolution) return ["latest", `Installing ${packageName}@latest (${ResolvedFromMessage.FALLBACK})`];
-	throw new DataError({
+	throw new DataError$1({
 		packageName,
 		strictVersionResolution,
 		packageFoundInDependencies: packageName in dependencies,
@@ -35502,8 +36014,8 @@ function getOptionalInput(name) {
 	await safeNpmDependencyGlobalInstall({
 		packageName: getInput("package_name", { required: true }),
 		versionRange: getOptionalInput("version_range"),
-		packageManager: parseZodSchema(zod_default.enum(PackageManager), getOptionalInput("package_manager") ?? PackageManager.NPM),
-		dependencyGroup: parseZodSchema(zod_default.enum(DependencyGroup), getOptionalInput("dependency_group") ?? DependencyGroup.DEPENDENCIES),
+		packageManager: parseZodSchema$1(zod_default.enum(PackageManager), getOptionalInput("package_manager") ?? PackageManager.NPM),
+		dependencyGroup: parseZodSchema$1(zod_default.enum(DependencyGroup), getOptionalInput("dependency_group") ?? DependencyGroup.DEPENDENCIES),
 		strictVersionResolution: getBooleanInput("strict_version_resolution")
 	});
 })();
