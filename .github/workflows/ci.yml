@@ -19,3 +19,17 @@ jobs:
 
   actions-ci:
     uses: alextheman231/github-actions/.github/workflows/actions-ci.yml@17b0fa199995087ecc1ac109e4eda26229743802 # v10.5.0
+
+  safe-npm-dependency-global-install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Test run of safe-npm-dependency-global-install
+        uses: ./actions/safe-npm-dependency-global-install
+        with:
+          package-name: alex-c-line
+          dependency-group: devDependencies
