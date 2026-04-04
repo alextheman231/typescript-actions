@@ -28,8 +28,3 @@ inputs:
     type: string
     required: false
     default: "npm"
-  self-install:
-    description: "Install from the project's own tarball. If `true`, this will take highest priority and make `version-range` and the `package.json` version redundant."
-    type: boolean
-    required: false
-    default: false
