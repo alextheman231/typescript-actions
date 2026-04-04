@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "typescript-actions",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Composite actions developed in TypeScript to use in GitHub Actions workflows.",
   "files": [
     "dist"
