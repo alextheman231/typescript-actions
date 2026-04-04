@@ -19,6 +19,5 @@ import getOptionalInput from "src/utility/getOptionalInput";
       getOptionalInput("dependency-group") ?? DependencyGroup.DEPENDENCIES,
     ),
     strictVersionResolution: getBooleanInput("strict-version-resolution"),
-    selfInstall: getBooleanInput("self-install"),
   });
 })();
