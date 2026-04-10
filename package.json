@@ -30,7 +30,8 @@
     "pre-commit": "pnpm run build-configs && alex-c-line pre-commit",
     "prepare": "husky",
     "test": "vitest run",
-    "test-watch": "vitest"
+    "test-watch": "vitest",
+    "update-dependencies": "pnpm update --latest && pnpm update"
   },
   "author": "alextheman",
   "license": "ISC",
