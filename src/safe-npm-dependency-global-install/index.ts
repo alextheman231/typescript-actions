@@ -1,5 +1,5 @@
 import { getBooleanInput, getInput } from "@actions/core";
-import { parseZodSchema } from "@alextheman/utility";
+import { az } from "@alextheman/utility";
 import { DependencyGroup, PackageManager } from "@alextheman/utility/internal";
 import z from "zod";
 
@@ -10,14 +10,12 @@ import getOptionalInput from "src/utility/getOptionalInput";
   await safeNpmDependencyGlobalInstall({
     packageName: getInput("package-name", { required: true }),
     versionRange: getOptionalInput("version-range"),
-    packageManager: parseZodSchema(
-      z.enum(PackageManager),
-      getOptionalInput("package-manager") ?? PackageManager.NPM,
-    ),
-    dependencyGroup: parseZodSchema(
-      z.enum(DependencyGroup),
-      getOptionalInput("dependency-group") ?? DependencyGroup.DEPENDENCIES,
-    ),
+    packageManager: az
+      .with(z.enum(PackageManager))
+      .parse(getOptionalInput("package-manager") ?? PackageManager.NPM),
+    dependencyGroup: az
+      .with(z.enum(DependencyGroup))
+      .parse(getOptionalInput("dependency-group") ?? DependencyGroup.DEPENDENCIES),
     strictVersionResolution: getBooleanInput("strict-version-resolution"),
   });
 })();
