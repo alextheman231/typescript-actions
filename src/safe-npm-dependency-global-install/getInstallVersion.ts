@@ -1,6 +1,6 @@
 import type { CreateEnumType } from "@alextheman/utility";
 
-import { DataError } from "@alextheman/utility";
+import { DataError } from "@alextheman/utility/v6";
 
 interface GetInstallVersionArguments {
   dependencies: Record<string, string>;
