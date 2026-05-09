@@ -10,7 +10,7 @@ jobs:
       contents: write
       pull-requests: write
     if: ${{ github.repository == 'alextheman231/typescript-actions' }}
-    uses: alextheman231/github-actions/.github/workflows/commit-version-change.yml@2e41fee3271c96b410b398994b6df72997e18c02 # v11.2.1
+    uses: alextheman231/github-actions/.github/workflows/commit-version-change.yml@c4545878d40d8cd0b3b08c8f693c27980b5f3e16 # v11.2.2
     with:
       version-type: major
       run-build: true
@@ -23,7 +23,7 @@ jobs:
       contents: write
       pull-requests: write
     if: ${{ github.repository == 'alextheman231/typescript-actions' }}
-    uses: alextheman231/github-actions/.github/workflows/commit-version-change.yml@2e41fee3271c96b410b398994b6df72997e18c02 # v11.2.1
+    uses: alextheman231/github-actions/.github/workflows/commit-version-change.yml@c4545878d40d8cd0b3b08c8f693c27980b5f3e16 # v11.2.2
     with:
       version-type: minor
       run-build: true
@@ -36,7 +36,7 @@ jobs:
       contents: write
       pull-requests: write
     if: ${{ github.repository == 'alextheman231/typescript-actions' }}
-    uses: alextheman231/github-actions/.github/workflows/commit-version-change.yml@2e41fee3271c96b410b398994b6df72997e18c02 # v11.2.1
+    uses: alextheman231/github-actions/.github/workflows/commit-version-change.yml@c4545878d40d8cd0b3b08c8f693c27980b5f3e16 # v11.2.2
     with:
       version-type: patch
       run-build: true
