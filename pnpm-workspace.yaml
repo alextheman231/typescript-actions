@@ -1,3 +1,6 @@
 savePrefix: ""
 allowBuilds:
   unrs-resolver: true
+minimumReleaseAgeExclude:
+  - "@alextheman/*"
+  - alex-c-line
