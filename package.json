@@ -40,20 +40,20 @@
   "license": "ISC",
   "packageManager": "pnpm@11.5.0+sha512.dbfcc4f81cf48597afd4bc391ffdf12c11f1a9fb83a395bfa6b0a2d9cc2fd8ffebafdb1ccbd529632153f793904c2615b7f09fe1a345473fd1c35845172a8eb1",
   "devDependencies": {
-    "@alextheman/eslint-plugin": "5.15.0",
+    "@alextheman/eslint-plugin": "5.16.1",
     "@types/node": "25.9.1",
     "alex-c-line": "2.8.1",
     "eslint": "10.4.0",
     "husky": "9.1.7",
     "markdownlint-cli2": "0.22.1",
     "prettier": "3.8.3",
-    "tsdown": "0.22.0",
+    "tsdown": "0.22.1",
     "typescript": "6.0.3",
     "vitest": "4.1.7"
   },
   "dependencies": {
     "@actions/core": "3.0.1",
-    "@alextheman/utility": "5.19.0",
+    "@alextheman/utility": "5.19.1",
     "execa": "9.6.1",
     "zod": "4.4.3"
   }
