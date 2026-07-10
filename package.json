@@ -48,7 +48,7 @@
     "markdownlint-cli2": "0.23.0",
     "prettier": "3.9.5",
     "tsdown": "0.22.4",
-    "typescript": "7.0.2",
+    "typescript": "6.0.3",
     "vitest": "4.1.10"
   },
   "dependencies": {
