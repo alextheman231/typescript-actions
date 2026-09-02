@@ -11,6 +11,10 @@ const config: Array<UserConfig> = [
     entry: ["src/actions/safe-npm-dependency-global-install/index.ts"],
     outDir: "actions/safe-npm-dependency-global-install/dist",
   },
+  {
+    entry: ["src/actions/get-risk-label-name/index.ts"],
+    outDir: "actions/get-risk-label-name/dist",
+  },
 ].map(({ entry, outDir }) => {
   return {
     entry,
