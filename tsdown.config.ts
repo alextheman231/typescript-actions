@@ -8,8 +8,13 @@ const ALL_THE_DEPENDENCIES_TO_BUNDLE_BECAUSE_GITHUB_ACTIONS_IS_GARBAGE = [
 
 const config: Array<UserConfig> = [
   {
-    entry: ["src/safe-npm-dependency-global-install/index.ts"],
+    entry: ["src/actions/safe-npm-dependency-global-install/index.ts"],
     outDir: "actions/safe-npm-dependency-global-install/dist",
+  },
+].map(({ entry, outDir }) => {
+  return {
+    entry,
+    outDir,
     format: ["esm"],
     dts: true,
     clean: true,
@@ -17,7 +22,7 @@ const config: Array<UserConfig> = [
     deps: {
       alwaysBundle: ALL_THE_DEPENDENCIES_TO_BUNDLE_BECAUSE_GITHUB_ACTIONS_IS_GARBAGE,
     },
-  },
-];
+  };
+});
 
 export default config;

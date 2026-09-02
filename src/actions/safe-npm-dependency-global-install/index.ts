@@ -3,7 +3,7 @@ import { az } from "@alextheman/utility";
 import { DependencyGroup, PackageManager } from "@alextheman/utility/internal";
 import z from "zod";
 
-import safeNpmDependencyGlobalInstall from "src/safe-npm-dependency-global-install/safeNpmDependencyGlobalInstall";
+import safeNpmDependencyGlobalInstall from "src/actions/safe-npm-dependency-global-install/safeNpmDependencyGlobalInstall";
 import getOptionalInput from "src/utility/getOptionalInput";
 
 (async () => {

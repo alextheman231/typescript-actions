@@ -3,7 +3,7 @@ import type { DependencyGroup, PackageManager } from "@alextheman/utility/intern
 import { getDependenciesFromGroup, getPackageJsonContents } from "@alextheman/utility/internal";
 import { execa } from "execa";
 
-import getInstallVersion from "src/safe-npm-dependency-global-install/getInstallVersion";
+import getInstallVersion from "src/actions/safe-npm-dependency-global-install/getInstallVersion";
 
 export interface SafeNpmDependencyGlobalInstallInputs {
   packageName: string;
