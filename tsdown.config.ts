@@ -15,6 +15,10 @@ const config: Array<UserConfig> = [
     entry: ["src/actions/get-risk-label-name/index.ts"],
     outDir: "actions/get-risk-label-name/dist",
   },
+  {
+    entry: ["src/actions/add-risk-label/index.ts"],
+    outDir: "actions/add-risk-label/dist",
+  },
 ].map(({ entry, outDir }) => {
   return {
     entry,
