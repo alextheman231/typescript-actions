@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import { dependencies } from "package.json" with { type: "json" };
 import getInstallVersion, {
   ResolvedFromMessage,
-} from "src/safe-npm-dependency-global-install/getInstallVersion";
+} from "src/actions/safe-npm-dependency-global-install/getInstallVersion";
 import { DataError, VersionNumber } from "@alextheman/utility";
 
 const VERSION_RANGE_FIXTURES: Array<string> = [
