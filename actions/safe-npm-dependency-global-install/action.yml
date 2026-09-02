@@ -1,7 +1,7 @@
 name: Safe NPM dependency global install
 description: Safely install an NPM dependency globally in an action
 runs:
-  using: node20
+  using: node24
   main: dist/index.js
 
 inputs:
