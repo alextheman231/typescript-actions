@@ -12,7 +12,6 @@ import { EventEmitter, addAbortListener, on, once, setMaxListeners } from "node:
 import { fileURLToPath } from "node:url";
 import "child_process";
 import "timers";
-import { DataError } from "@alextheman/utility/v6";
 import { ChildProcess, execFile, spawn, spawnSync } from "node:child_process";
 import { StringDecoder } from "node:string_decoder";
 import process$1, { execArgv, execPath, hrtime, platform } from "node:process";
@@ -29705,7 +29704,7 @@ const VERSION_NUMBER_REGEX = RegExp(`^${VERSION_NUMBER_REGEX_PATTERN}$`);
 *
 * @template ErrorCode The type of the standardised error code.
 */
-var CodeError = class CodeError extends Error {
+var CodeError$1 = class CodeError extends Error {
 	code;
 	/**
 	* @param code - A standardised code (e.g. UNEXPECTED_DATA).
@@ -29729,11 +29728,11 @@ var CodeError = class CodeError extends Error {
 	*/
 	static check(input) {
 		if (input instanceof CodeError) return true;
-		return containsKeys(input, ["message", "code"]) && typeof input.message === "string" && typeof input.code === "string";
+		return containsKeys$1(input, ["message", "code"]) && typeof input.message === "string" && typeof input.code === "string";
 	}
 	static checkCaughtError(error, options) {
 		if (this.check(error)) {
-			if (options?.expectedCode && error.code !== options.expectedCode) throw new Error(normaliseIndents`The error code on the thrown error does not match the expected error code.
+			if (options?.expectedCode && error.code !== options.expectedCode) throw new Error(normaliseIndents$1`The error code on the thrown error does not match the expected error code.
             
             Expected: ${options.expectedCode}
             Received: ${error.code}
@@ -29815,7 +29814,7 @@ var CodeError = class CodeError extends Error {
 * @template DataType The type of the data that caused the error.
 * @template ErrorCode The type of the standardised error code.
 */
-var DataError$1 = class DataError$1 extends CodeError {
+var DataError$1 = class DataError$1 extends CodeError$1 {
 	data;
 	/**
 	* @param data - The data that caused the error.
@@ -29840,11 +29839,11 @@ var DataError$1 = class DataError$1 extends CodeError {
 	*/
 	static check(input) {
 		if (input instanceof DataError$1) return true;
-		return containsKeys(input, [
+		return containsKeys$1(input, [
 			"data",
 			"code",
 			"message"
-		]) && typeof input.message === "string" && typeof input.code === "string" && isNonNullableObject(input.data);
+		]) && typeof input.message === "string" && typeof input.code === "string" && isNonNullableObject$1(input.data);
 	}
 	/**
 	* Check a `DataError` against its error code
@@ -29918,7 +29917,7 @@ var DataError$1 = class DataError$1 extends CodeError {
 *
 * @returns An array of numbers satisfying the range provided.
 */
-function range(start, stop, step = 1) {
+function range$1(start, stop, step = 1) {
 	const numbers = [];
 	if (step === 0) throw new DataError$1({ step }, "ZERO_STEP_SIZE", "Step size cannot be zero.");
 	else if (step > 0) {
@@ -29947,7 +29946,7 @@ function range(start, stop, step = 1) {
 *
 * @returns `true` if the input is a non-nullable object, and `false` otherwise. The input type will also be narrowed down to be a non-nullable object.
 */
-function isNonNullableObject(input) {
+function isNonNullableObject$1(input) {
 	return typeof input === "object" && input !== null;
 }
 /**
@@ -29960,7 +29959,7 @@ function isNonNullableObject(input) {
 *
 * @returns `true` if the input object contains all provided keys, and `false` otherwise. The input type will also be narrowed down to be a record with the provided keys with an unknown value type.
 */
-function objectContainsKeys(input, keys) {
+function objectContainsKeys$1(input, keys) {
 	const expectedKeys = Array.isArray(keys) ? keys : [keys];
 	if (expectedKeys.length === 0) return false;
 	for (const key of expectedKeys) if (!(key in input)) return false;
@@ -29976,8 +29975,8 @@ function objectContainsKeys(input, keys) {
 *
 * @returns `true` if the input is an object containing all provided keys, and `false` otherwise. The input type will also be narrowed down to be a record with the provided keys, each with an unknown value type.
 */
-function containsKeys(input, keys) {
-	return isNonNullableObject(input) && objectContainsKeys(input, keys);
+function containsKeys$1(input, keys) {
+	return isNonNullableObject$1(input) && objectContainsKeys$1(input, keys);
 }
 /**
 * Creates a new array where each element is the result of the provided callback.
@@ -29995,17 +29994,17 @@ function containsKeys(input, keys) {
 *
 * @returns An array of the callback results, or a Promise resolving to one if the callback is async.
 */
-function fillArray(callback, length = 1, options) {
+function fillArray$1(callback, length = 1, options) {
 	if (options?.sequential) return (async () => {
 		const resolvedArray = [];
-		for (const index of range(0, length)) resolvedArray.push(await callback(index));
+		for (const index of range$1(0, length)) resolvedArray.push(await callback(index));
 		return resolvedArray;
 	})();
 	const outputArray = new Array(length).fill(null).map((_, index) => {
 		return callback(index);
 	});
 	if (outputArray.some((item) => {
-		return item instanceof Promise || containsKeys(item, "then") && typeof item.then === "function";
+		return item instanceof Promise || containsKeys$1(item, "then") && typeof item.then === "function";
 	})) return Promise.all(outputArray);
 	return outputArray;
 }
@@ -30025,7 +30024,7 @@ function fillArray(callback, length = 1, options) {
 *
 * @returns An array of `[firstItem, secondItem]` tuples for each index in `firstArray`.
 */
-function paralleliseArrays(firstArray, secondArray) {
+function paralleliseArrays$1(firstArray, secondArray) {
 	const outputArray = [];
 	for (let i = 0; i < firstArray.length; i++) outputArray.push([firstArray[i], secondArray[i]]);
 	return outputArray;
@@ -30098,7 +30097,7 @@ var VersionNumber = class VersionNumber {
 			this.major = major;
 			this.minor = minor;
 			this.patch = patch;
-		} else throw new DataError$1({ input }, "INVALID_INPUT", normaliseIndents`
+		} else throw new DataError$1({ input }, "INVALID_INPUT", normaliseIndents$1`
         The provided input can not be parsed into a valid version number.
         Expected either a string of format X.Y.Z or vX.Y.Z, a tuple of three numbers, or another \`VersionNumber\` instance.
       `);
@@ -30341,6 +30340,224 @@ const VersionType = {
 *
 * @returns A new string with the strings and interpolations from the template applied.
 */
+function interpolate$1(strings, ...interpolations) {
+	let result = "";
+	for (const [string, interpolation = ""] of paralleliseArrays$1(strings, interpolations)) result += string + interpolation;
+	return result;
+}
+function calculateTabSize$1(line, whitespaceLength) {
+	const potentialWhitespacePart = line.slice(0, whitespaceLength);
+	const trimmedString = line.trimStart();
+	if (potentialWhitespacePart.trim() !== "") return 0;
+	const tabSize = line.length - (trimmedString.length + whitespaceLength);
+	return tabSize < 0 ? 0 : tabSize;
+}
+function getWhitespaceLength$1(lines) {
+	const [firstNonEmptyLine] = lines.filter((line) => {
+		return line.trim() !== "";
+	});
+	return firstNonEmptyLine.length - firstNonEmptyLine.trimStart().length;
+}
+function reduceLines$1(lines, { preserveTabs = true }) {
+	const slicedLines = lines.slice(1);
+	const isFirstLineEmpty = lines[0].trim() === "";
+	const whitespaceLength = getWhitespaceLength$1(isFirstLineEmpty ? lines : slicedLines);
+	return (isFirstLineEmpty ? slicedLines : lines).map((line) => {
+		const tabSize = calculateTabSize$1(line, whitespaceLength);
+		return (preserveTabs ? fillArray$1(() => {
+			return " ";
+		}, tabSize).join("") : "") + line.trimStart();
+	}).join("\n");
+}
+/**
+* Applies any options if provided, then removes any extraneous indents from a multi-line template string.
+*
+* You can pass a template string directly by doing:
+*
+* ```typescript
+* normaliseIndents`Template string here
+*     with a new line
+*     and another new line`;
+* ```
+*
+* You may also pass the options first, then invoke the resulting function with a template string:
+*
+* ```typescript
+* normaliseIndents({ preserveTabs: false })`Template string here
+*     with a new line
+*     and another new line`;
+* ```
+*
+* @category Tagged Template
+*
+* @param first - The strings from the template to process, or the options to apply.
+* @param args - An array of all interpolations from the template.
+*
+* @returns An additional function to invoke, or a new string with the strings and interpolations from the template applied, and extraneous indents removed.
+*/
+function normaliseIndents$1(first, ...args) {
+	if (isNonNullableObject$1(first) && !Array.isArray(first)) {
+		const options = first;
+		return (strings, ...interpolations) => {
+			return normaliseIndents$1(strings, ...interpolations, options);
+		};
+	}
+	const strings = first;
+	const options = typeof args[args.length - 1] === "object" && !Array.isArray(args[args.length - 1]) ? args.pop() : {};
+	return reduceLines$1(interpolate$1(strings, ...[...args]).split("\n"), options);
+}
+String.raw`^(?:v)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
+//#endregion
+//#region node_modules/.pnpm/@alextheman+utility@5.28.0_zod@4.4.3/node_modules/@alextheman/utility/dist/v6/index.js
+/**
+* Creates an array of numbers within a given range.
+*
+* - The range is inclusive of `start` and exclusive of `stop`.
+* - The sign of `step` must match the direction of the range.
+*
+* @category Array Helpers
+*
+* @param start - The number to start at (inclusive).
+* @param stop - The number to stop at (exclusive).
+* @param step - The step size between numbers, defaulting to 1.
+*
+* @throws {DataError} If `step` is `0`.
+* @throws {DataError} If `step` direction does not match the order of `start` and `stop`.
+*
+* @returns An array of numbers satisfying the range provided.
+*/
+function range(start, stop, step = 1) {
+	const numbers = [];
+	if (step === 0) throw new DataError({ step }, "ZERO_STEP_SIZE", "Step size cannot be zero.");
+	else if (step > 0) {
+		if (start > stop) throw new DataError({
+			start,
+			stop,
+			step
+		}, "INVALID_BOUNDARIES", "The starting value cannot be bigger than the final value if step is positive");
+		for (let i = start; i < stop; i += step) numbers.push(i);
+	} else if (step < 0) {
+		if (start < stop) throw new DataError({
+			start,
+			stop,
+			step
+		}, "INVALID_BOUNDARIES", "The final value cannot be bigger than the starting value if step is negative");
+		for (let i = start; i > stop; i += step) numbers.push(i);
+	}
+	return numbers;
+}
+/**
+* Determines if the given input is a non-nullable object, narrowing the type down as such if it is
+*
+* @category Type Assertions
+*
+* @param input - The input to check
+*
+* @returns `true` if the input is a non-nullable object, and `false` otherwise. The input type will also be narrowed down to be a non-nullable object.
+*/
+function isNonNullableObject(input) {
+	return typeof input === "object" && input !== null;
+}
+/**
+* Determines if the given object contains all of the keys provided.
+*
+* @category Type Assertions
+*
+* @param input - The input object to check.
+* @param keys - The keys expected to be in the input object.
+*
+* @returns `true` if the input object contains all provided keys, and `false` otherwise. The input type will also be narrowed down to be a record with the provided keys with an unknown value type.
+*/
+function objectContainsKeys(input, keys) {
+	const expectedKeys = Array.isArray(keys) ? keys : [keys];
+	if (expectedKeys.length === 0) return false;
+	for (const key of expectedKeys) if (!(key in input)) return false;
+	return true;
+}
+/**
+* Determines if the given input is a non-nullable object, and if that object contains all of the keys provided.
+*
+* @category Type Assertions
+*
+* @param input - The input to check.
+* @param keys - The keys expected to be in the input if it's an object.
+*
+* @returns `true` if the input is an object containing all provided keys, and `false` otherwise. The input type will also be narrowed down to be a record with the provided keys, each with an unknown value type.
+*/
+function containsKeys(input, keys) {
+	return isNonNullableObject(input) && objectContainsKeys(input, keys);
+}
+/**
+* Creates a new array where each element is the result of the provided callback.
+*
+* If the callback returns at least one Promise, the entire result will be wrapped
+* in a `Promise` and resolved with `Promise.all`. Otherwise, a plain array is returned.
+*
+* @category Array Helpers
+*
+* @template ItemType - The return type of the callback (awaited if any items are a Promise) that becomes the type of the array items.
+*
+* @param callback - A function invoked with the current index. May return a value or a Promise.
+* @param length - The desired length of the resulting array.
+* @param options - Extra options to apply if any item is asynchronous.
+*
+* @returns An array of the callback results, or a Promise resolving to one if the callback is async.
+*/
+function fillArray(callback, length = 1, options) {
+	if (options?.sequential) return (async () => {
+		const resolvedArray = [];
+		for (const index of range(0, length)) resolvedArray.push(await callback(index));
+		return resolvedArray;
+	})();
+	const outputArray = new Array(length).fill(null).map((_, index) => {
+		return callback(index);
+	});
+	if (outputArray.some((item) => {
+		return item instanceof Promise || containsKeys(item, "then") && typeof item.then === "function";
+	})) return Promise.all(outputArray);
+	return outputArray;
+}
+/**
+* Creates a new array of tuples, each containing the item at the given index from both arrays.
+*
+* If `secondArray` is shorter than `firstArray`, the second position in the tuple
+* will be `undefined`. Iteration always uses the length of the first array.
+*
+* @category Array Helpers
+*
+* @template FirstArrayItem
+* @template SecondArrayItem
+*
+* @param firstArray - The first array. Each item in this will take up the first tuple spot.
+* @param secondArray - The second array. Each item in this will take up the second tuple spot.
+*
+* @returns An array of `[firstItem, secondItem]` tuples for each index in `firstArray`.
+*/
+function paralleliseArrays(firstArray, secondArray) {
+	const outputArray = [];
+	for (let i = 0; i < firstArray.length; i++) outputArray.push([firstArray[i], secondArray[i]]);
+	return outputArray;
+}
+/**
+* Returns the result of interpolating a template string when given the strings and interpolations separately.
+*
+* You can pass a template string directly by doing:
+*
+* ```
+* interpolate`Template string here`;
+* ```
+*
+* In this case, it will be functionally the same as if you just wrote the template string by itself.
+*
+* @category Tagged Template
+*
+* @template InterpolationsType - The type of the interpolations.
+*
+* @param strings - The strings from the template to process.
+* @param interpolations - An array of all interpolations from the template.
+*
+* @returns A new string with the strings and interpolations from the template applied.
+*/
 function interpolate(strings, ...interpolations) {
 	let result = "";
 	for (const [string, interpolation = ""] of paralleliseArrays(strings, interpolations)) result += string + interpolation;
@@ -30407,7 +30624,209 @@ function normaliseIndents(first, ...args) {
 	const options = typeof args[args.length - 1] === "object" && !Array.isArray(args[args.length - 1]) ? args.pop() : {};
 	return reduceLines(interpolate(strings, ...[...args]).split("\n"), options);
 }
-String.raw`^(?:v)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`;
+/**
+* Represents errors that can be described using a standardised error code, and a human-readable error message.
+*
+* @category Types
+*
+* @template ErrorCode The type of the standardised error code.
+*/
+var CodeError = class CodeError extends Error {
+	code;
+	/**
+	* @param code - A standardised code (e.g. UNEXPECTED_DATA).
+	* @param message  - A human-readable error message (e.g. The data provided is invalid).
+	* @param options - Extra options to pass to super Error constructor.
+	*/
+	constructor(code, message = "Something went wrong.", options) {
+		super(message, options);
+		if (Error.captureStackTrace) Error.captureStackTrace(this, new.target);
+		this.name = new.target.name;
+		this.code = code;
+		Object.defineProperty(this, "message", { enumerable: true });
+		Object.setPrototypeOf(this, new.target.prototype);
+	}
+	/**
+	* Checks whether the given input may have been caused by a CodeError.
+	*
+	* @param input - The input to check.
+	*
+	* @returns `true` if the input is a CodeError, and `false` otherwise. The type of the input will also be narrowed down to CodeError if `true`.
+	*/
+	static check(input) {
+		if (input instanceof CodeError) return true;
+		return containsKeys(input, ["message", "code"]) && typeof input.message === "string" && typeof input.code === "string";
+	}
+	static checkCaughtError(error, options) {
+		if (this.check(error)) {
+			if (options?.expectedCode && error.code !== options.expectedCode) throw new Error(normaliseIndents`The error code on the thrown error does not match the expected error code.
+            
+            Expected: ${options.expectedCode}
+            Received: ${error.code}
+            `, { cause: error });
+			return error;
+		}
+		throw error;
+	}
+	/**
+	* Check a `CodeError` against its error code
+	*
+	* This will also automatically narrow down the type of the input to be `CodeError`, with its error code properly typed if this function returns true.
+	*
+	* @template ErrorCode The type of the error code
+	*
+	* @param input - The input to check.
+	* @param code - The expected code of the resulting error.
+	*
+	* @returns `true` if the error code matches the expected code, and `false` otherwise. The type of the input will also be narrowed down to CodeError, and its code will be narrowed to the expected code's type if the function returns `true`.
+	*/
+	static checkWithCode(input, code) {
+		return this.check(input) && input.code === code;
+	}
+	/**
+	* Gets the thrown `CodeError` from a given function if one was thrown, and re-throws any other errors, or throws a default `CodeError` if no error thrown.
+	*
+	* @param errorFunction - The function expected to throw the error.
+	* @param options - Extra options to apply.
+	*
+	* @throws {Error} Any other errors thrown by the `errorFunction` that are not a `CodeError`.
+	* @throws {Error} If no `CodeError` was thrown by the `errorFunction`
+	*
+	* @returns The `CodeError` that was thrown by the `errorFunction`
+	*/
+	static expectError(errorFunction, options) {
+		try {
+			errorFunction();
+		} catch (error) {
+			return this.checkCaughtError(error, options);
+		}
+		throw new Error(`Expected a ${this.name} to be thrown but none was thrown`);
+	}
+	/**
+	* Gets the thrown `CodeError` from a given asynchronous function if one was thrown, and re-throws any other errors, or throws a default `CodeError` if no error thrown.
+	*
+	* @param errorFunction - The function expected to throw the error.
+	* @param options - Extra options to apply.
+	*
+	* @throws {Error} Any other errors thrown by the `errorFunction` that are not a `CodeError`.
+	* @throws {Error} If no `CodeError` was thrown by the `errorFunction`
+	*
+	* @returns The `CodeError` that was thrown by the `errorFunction`
+	*/
+	static async expectErrorAsync(errorFunction, options) {
+		try {
+			await errorFunction();
+		} catch (error) {
+			return this.checkCaughtError(error, options);
+		}
+		throw new Error(`Expected a ${this.name} to be thrown but none was thrown`);
+	}
+	/**
+	* Converts the `CodeError` instance to a serialised JSON payload.
+	*
+	* @returns A JSON serialised version of the current `CodeError` instance.
+	*/
+	toJSON() {
+		return {
+			code: this.code,
+			message: this.message
+		};
+	}
+};
+/**
+* Represents errors you may get that may've been caused by a specific piece of data.
+*
+* @category Types
+*
+* @template DataType The type of the data that caused the error.
+* @template ErrorCode The type of the standardised error code.
+*/
+var DataError = class DataError extends CodeError {
+	data;
+	/**
+	* @param data - The data that caused the error.
+	* @param code - A standardised code (e.g. UNEXPECTED_DATA).
+	* @param message - A human-readable error message (e.g. The data provided is invalid).
+	* @param options - Extra options to pass to super Error constructor.
+	*/
+	constructor(data, code, message = "The data provided is invalid", options) {
+		super(code, message, options);
+		if (Error.captureStackTrace) Error.captureStackTrace(this, new.target);
+		this.name = new.target.name;
+		this.data = data;
+		Object.defineProperty(this, "message", { enumerable: true });
+		Object.setPrototypeOf(this, new.target.prototype);
+	}
+	/**
+	* Checks whether the given input may have been caused by a DataError.
+	*
+	* @param input - The input to check.
+	*
+	* @returns `true` if the input is a DataError, and `false` otherwise. The type of the input will also be narrowed down to DataError if `true`.
+	*/
+	static check(input) {
+		if (input instanceof DataError) return true;
+		return containsKeys(input, [
+			"data",
+			"code",
+			"message"
+		]) && typeof input.message === "string" && typeof input.code === "string" && isNonNullableObject(input.data);
+	}
+	/**
+	* Check a `DataError` against its error code
+	*
+	* This will also automatically narrow down the type of the input to be `DataError`, with its error code properly typed if this function returns true.
+	*
+	* @template ErrorCode The type of the error code
+	*
+	* @param input - The input to check.
+	* @param code - The expected code of the resulting error.
+	*
+	* @returns `true` if the error code matches the expected code, and `false` otherwise. The type of the input will also be narrowed down to `DataError`, and its code will be narrowed to the expected code's type if the function returns `true`.
+	*/
+	static checkWithCode(input, code) {
+		return this.check(input) && input.code === code;
+	}
+	/**
+	* Gets the thrown `DataError` from a given function if one was thrown, and re-throws any other errors, or throws a default `DataError` if no error thrown.
+	*
+	* @param errorFunction - The function expected to throw the error.
+	* @param options - Extra options to apply.
+	*
+	* @throws {Error} Any other errors thrown by the `errorFunction` that are not a `DataError`.
+	* @throws {Error} If no `DataError` was thrown by the `errorFunction`
+	*
+	* @returns The `DataError` that was thrown by the `errorFunction`
+	*/
+	static expectError(errorFunction, options) {
+		return super.expectError(errorFunction, options);
+	}
+	/**
+	* Gets the thrown `DataError` from a given asynchronous function if one was thrown, and re-throws any other errors, or throws a default `DataError` if no error thrown.
+	*
+	* @param errorFunction - The function expected to throw the error.
+	* @param options - Extra options to apply.
+	*
+	* @throws {Error} Any other errors thrown by the `errorFunction` that are not a `DataError`.
+	* @throws {Error} If no `DataError` was thrown by the `errorFunction`
+	*
+	* @returns The `DataError` that was thrown by the `errorFunction`
+	*/
+	static async expectErrorAsync(errorFunction, options) {
+		return await super.expectErrorAsync(errorFunction, options);
+	}
+	/**
+	* Converts the `DataError` instance to a serialised JSON payload.
+	*
+	* @returns A JSON serialised version of the current `DataError` instance.
+	*/
+	toJSON() {
+		return {
+			...super.toJSON(),
+			data: this.data
+		};
+	}
+};
 //#endregion
 //#region node_modules/.pnpm/is-plain-obj@4.1.0/node_modules/is-plain-obj/index.js
 function isPlainObject(value) {
@@ -36766,7 +37185,7 @@ async function addRiskLabel({ lowRiskLabelName, mediumRiskLabelName, highRiskLab
 	const existingRiskLabels = labels.map((label) => {
 		return label.name;
 	}).filter((name) => {
-		validLabels.includes(name);
+		return validLabels.includes(name);
 	});
 	if (existingRiskLabels.includes(labelToAdd)) {
 		console.info("Risk label already added.");
