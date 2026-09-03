@@ -37181,7 +37181,8 @@ async function addRiskLabel({ lowRiskLabelName, mediumRiskLabelName, highRiskLab
 		GH_TOKEN: githubToken,
 		GH_REPO: githubRepository
 	} });
-	const { labels } = az.with(labelsSchema).parse(await githubActionsClient`gh pr view ${pullRequestNumber} --json labels`);
+	const { stdout } = await githubActionsClient`gh pr view ${pullRequestNumber} --json labels`;
+	const { labels } = az.with(labelsSchema).parse(JSON.parse(stdout));
 	const existingRiskLabels = labels.map((label) => {
 		return label.name;
 	}).filter((name) => {
