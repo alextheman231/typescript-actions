@@ -37192,8 +37192,8 @@ async function addRiskLabel({ lowRiskLabelName, mediumRiskLabelName, highRiskLab
 		console.info("Risk label already added.");
 		return;
 	}
-	for (const label of existingRiskLabels) await githubActionsClient`gh pr edit ${pullRequestNumber} --remove-label ${label}`;
-	await githubActionsClient`gh pr edit ${pullRequestNumber} --add-label ${labelToAdd}`;
+	for (const label of existingRiskLabels) await githubActionsClient({ stdio: "inherit" })`gh pr edit ${pullRequestNumber} --remove-label ${label}`;
+	await githubActionsClient({ stdio: "inherit" })`gh pr edit ${pullRequestNumber} --add-label ${labelToAdd}`;
 }
 //#endregion
 //#region src/utility/getOptionalInput.ts
