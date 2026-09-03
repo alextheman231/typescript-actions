@@ -66,10 +66,14 @@ async function addRiskLabel({
   }
 
   for (const label of existingRiskLabels) {
-    await githubActionsClient`gh pr edit ${pullRequestNumber} --remove-label ${label}`;
+    await githubActionsClient({
+      stdio: "inherit",
+    })`gh pr edit ${pullRequestNumber} --remove-label ${label}`;
   }
 
-  await githubActionsClient`gh pr edit ${pullRequestNumber} --add-label ${labelToAdd}`;
+  await githubActionsClient({
+    stdio: "inherit",
+  })`gh pr edit ${pullRequestNumber} --add-label ${labelToAdd}`;
 }
 
 export default addRiskLabel;
