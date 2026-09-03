@@ -4,6 +4,7 @@ import packageInfo from "./package.json" with { type: "json" };
 const ALL_THE_DEPENDENCIES_TO_BUNDLE_BECAUSE_GITHUB_ACTIONS_IS_GARBAGE = [
   ...Object.keys(packageInfo.dependencies),
   "@alextheman/utility/internal",
+  "@alextheman/utility/v6",
 ];
 
 const config: Array<UserConfig> = [
