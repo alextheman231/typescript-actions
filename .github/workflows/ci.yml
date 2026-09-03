@@ -13,12 +13,12 @@ permissions:
 
 jobs:
   package-ci:
-    uses: alextheman231/github-actions/.github/workflows/package-ci.yml@bba094b0c09dda59228db6437a5231ba0538d09a # v12.7.0
+    uses: alextheman231/github-actions/.github/workflows/package-ci.yml@343e1798604e0cb36cd38375eb5671b0ac33e626 # v12.7.3
     with:
       run_build: false
 
   actions-ci:
-    uses: alextheman231/github-actions/.github/workflows/actions-ci.yml@bba094b0c09dda59228db6437a5231ba0538d09a # v12.7.0
+    uses: alextheman231/github-actions/.github/workflows/actions-ci.yml@343e1798604e0cb36cd38375eb5671b0ac33e626 # v12.7.3
 
   safe-npm-dependency-global-install:
     runs-on: ubuntu-latest
