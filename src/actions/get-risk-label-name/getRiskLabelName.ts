@@ -13,7 +13,7 @@ export interface CheckRiskLevelInputs {
   lowRiskLabelName: string;
   mediumRiskLabelName: string;
   highRiskLabelName: string;
-  riskLevel: RiskLevel;
+  riskLevel: RiskLevel | null;
 }
 
 async function getRiskLabelName({
@@ -34,6 +34,9 @@ async function getRiskLabelName({
     case "high": {
       setOutput("label", highRiskLabelName);
       break;
+    }
+    case null: {
+      return;
     }
     default: {
       throw riskLevel satisfies never;
