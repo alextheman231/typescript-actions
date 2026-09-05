@@ -30538,7 +30538,7 @@ function getOptionalInput(name) {
 //#region src/actions/get-risk-label-name/index.ts
 (async () => {
 	await getRiskLabelName({
-		riskLevel: az.with(zod_default.enum(RiskLevel).nullable()).parse(getNullableInput("risk-level")?.toLowerCase()),
+		riskLevel: az.with(zod_default.enum(RiskLevel).nullable()).parse(getNullableInput("risk-level")?.toLowerCase() ?? null),
 		lowRiskLabelName: getOptionalInput("low-risk-label-name") ?? "low risk",
 		mediumRiskLabelName: getOptionalInput("medium-risk-label-name") ?? "medium risk",
 		highRiskLabelName: getOptionalInput("high-risk-label-name") ?? "high risk"
